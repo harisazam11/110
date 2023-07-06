@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user_name = $_SESSION['user_name'];
     // Insert the form data into the database table
     $sql = "INSERT INTO projects (project_name, team, access, deadline,Status,created_by)
-            VALUES ('$projectName', '$count', '$access', '$deadline','Pending','$user_id')";
+            VALUES ('$projectName', '$count', '$access', '$deadline','To Do','$user_id')";
             $result = $conn->query($sql);
     if ($result) {
         // Get the project ID assigned to the newly inserted row

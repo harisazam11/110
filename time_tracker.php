@@ -4,7 +4,7 @@
  session_start();
   include("classes/config.php");
   $uid= $_SESSION['user_id'];
-  $columns= "select * from tasks where assigned_to = '$uid';";
+  $columns= "select * from tasks where assigned_to = '$uid' and time_required!=0;";
   
   $result = $conn->query($columns);
 ?>
@@ -14,11 +14,13 @@
       <span class="heading">Time Tracker</span>
     </div>
 
-    <form action="process.php" method="post">
+    <form action="classes/tracker.php" method="post">
       <div class="task-bar">
         <!-- <div class="add-label" contenteditable="true" id="holder">
         <div class="label">Add task to track time</div>
       </div> -->
+      <input type="text" class="label" id="tid" name="taskid" value="" style="display:none" />
+       
         <div class="add-label">
           <input type="text" class="label" id="label" name="task" placeholder="Add task to track time" required />
         </div>
@@ -26,7 +28,7 @@
         <div class="add-due">
           <div class="due">
             <div class="iconadd" style="display: flex; align-items: center">
-              <input class="label" id="time-picker" placeholder="Add task due (in hours)" type="text" name="due_Time" 
+              <input class="label" id="time-picker" placeholder="Add task due (in hours)" type="number" name="due_Time" 
                 required />
               
               <div id="display"></div>
@@ -41,9 +43,6 @@
         </div>
       </div>
     </form>
-    <?php
-    
-    ?>
 
     <div class="filter-bar">
       <div class="filteration">
@@ -64,22 +63,17 @@
         </div>
       </div>
     </div>
-
+<br/><br/>
     <div class="project-list">
-      <div class="head">
-        <div class="date">Date</div>
-      </div>
       <div class="task-list">
         <!-- <div class="project-name">Name</div> -->
         <table>
           <thead>
             <tr>
-              <th>ID</th>
               <th>Task</th>
               <th>Project</th>
               <th>Due</th>
               <th>%</th>
-              <th>Status</th>
               <th>00:00:00</th>
               <th>Start</th>
               <th style="text-align: center">
@@ -90,41 +84,69 @@
           <tbody id="task-table-body">
             <?php
                if ($result->num_rows > 0) {
+                $i=0;
                 // Output a dropdown menu for each project name
                 while ($row = $result->fetch_assoc()) {
                   echo '<tr>';
-                  echo '<td>' . $row['task_id'] .'</td>';
+                  echo '<td style="display:none" id="task-id-'.$i.'">' . $row['task_id'] . '</td>';
                   echo '<td>' . $row['task_name'] . '</td>';
-                  echo '<td>' . $row['project_id'] . '</td>';
-                  echo '<td>' . $row['due_date'].'</td>';
-                  if($row['time_required']!='0')
-                  echo '<td>' . $row['time_spent']/$row['time_required'] .'</td>';
+                  $sql= "select project_name from projects where project_id = '".$row['project_id']."';";
+                  $r = $conn->query($sql);
+                  if($r->num_rows>0)
+                  echo '<td>' . $r->fetch_assoc()['project_name'] . '</td>';
                   else
-                  echo '<td>0%</td>';
-                  echo '<td>' . $row['status'].'</td>';
+                      echo '<td>No Project</td>';
+                  echo '<td>' . ($row['time_required']) / 3600 .'</td>';
+                  if($row['time_spent']!='0')
+                    echo '<td id="percentage-'.$i.'">' .$row['time_spent'].'</td>';
+                  else
+                    echo '<td id="percentage-'.$i.'">0%</td>';
+                  echo '<td id="timer-'.$i.'">'.$row['timer'].'</td>';
+
+                  echo  '<td style="text-align: center">
+                      <button onclick="startStopWatch('.$i.','.$row['time_required'].',\''.$row['timer'].'\',1)" id="startbtn-'.$i.'" style="border: none; background: none;display:block;">
+                        <img src="images/play (Stroke).png" alt="" style="width: 12px; height: 12px; margin-left: 0" />
+                      </button>
+                      <button onclick="startStopWatch('.$i.','.$row['time_required'].',\''.$row['timer'].'\',0)" id="stopbtn-'.$i.'" style="border: none; background: none;display:none;">
+                      <img src="images/Vector.png" alt="" style="width: 12px; height: 12px; margin-left: 0" />
+                    </button>
+                    </td>
+                  </td>
+                      <td style="text-align: center">
+                        <button  onclick="EditClicked('.$row['task_id'].',\''.$row['task_name'].'\','.$row['time_required'].')" id="update-btn-'.$i.'"  style="border: none; background: none;">
+                          <img src="images/icon.png" alt="" style="width: 15px; height: 15px; margin-left: 0px" />
+                        </button>
+                        <form method="POST" action="classes/deleteTask.php">
+                        <input type="text" name="taskId" value="'.$row['task_id'].'" required style="display:none;"/>
+                        <button type="submit" id="del-btn-'.$i.'"  style="border: none; background: none;">
+                        <img src="images/del.png" alt="" style="width: 15px; height: 15px; margin-left: 0px" />
+                      </button>
+                      </form>
+                      </td>';
                   echo '</tr>';
+                  $i++;
                     }
                   }else{
                     }
                     ?>
-            
-          </tbody>
+            </tbody>
         </table>
       </div>
     </div>
-    <div class="dropdown-menu" id="dropdown-menu">
-      <div class="delete">
-        <a href="#" class="delete">Delete</a>
-      </div>
+    <div class="overlay" id="overlay">
+    <div class="form-container">
+      <h2>Update Task Time</h2>
       <hr />
-      <div class="delete">
-        <a href="#" class="edit">Edit</a>
-      </div>
-      <hr />
-      <div class="view-team">
-        <a href="#" class="view-team">View Team</a>
-      </div>
+      <form action="classes/edittimer.php" method="POST" class="create-form">
+        <div class="filteration">
+        <input type="text" name="utid"  id="utid" placeholder="Task Name" class="input"  style="display:none;" required readonly/>
+         
+          <input type="text" name="ulabel"  id="ulabel" placeholder="Task Name" class="input" required readonly/>
+          <input type="text" name="utime" id="utime" class="input" placeholder="Update Time Required" />
+        </div>
+        <input type="submit" value="Submit" id="create-project">
+      </form>
     </div>
   </div>
-   <script src="app.js"></script> 
+   <script src="js/app.js"></script>
    <?php include "templates/footer.php"; ?>

@@ -6,7 +6,25 @@
     <div class="container" id="layout2">
       <div class="title">
         <div class="project-bar">
-          <div class="add-heading">Project</div>
+          <div class="add-heading">Project: 
+          <?php
+            include("classes/config.php");
+
+            // Retrieve project names from the database table
+            $sql = "SELECT project_name FROM projects where project_id = $project_id";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+              // Output a dropdown menu for each project name
+              while ($row = $result->fetch_assoc()) {
+                echo  $row['project_name'];
+              }
+            } 
+            // Close the database connection
+            $conn->close();
+          ?>
+
+          </div>
         </div>
       </div>
 
@@ -133,7 +151,7 @@
                           // Output a dropdown menu for each project name
                           while ($row = $result->fetch_assoc()) {
                             echo '<tr>';
-                            echo '<td>' . $row['task_name'] . '  ,  '.$row['user_email'].'</td>';
+                            echo '<td>' . $row['task_name'] .'</td>';
                             echo '</tr>';
                           }
                         } 
@@ -161,7 +179,7 @@
                           // Output a dropdown menu for each project name
                           while ($row = $result->fetch_assoc()) {
                             echo '<tr>';
-                            echo '<td>' . $row['task_name'] . '  ,  '.$row['user_email'].'</td>';
+                            echo '<td>' . $row['task_name'] .'</td>';
                             echo '</tr>';
                           }
                         } 
@@ -189,7 +207,7 @@
                           // Output a dropdown menu for each project name
                           while ($row = $result->fetch_assoc()) {
                             echo '<tr>';
-                            echo '<td>' . $row['task_name'] . '  ,  '.$row['user_email'].'</td>';
+                            echo '<td>' . $row['task_name'] .'</td>';
                             echo '</tr>';
                           }
                         } 

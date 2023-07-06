@@ -1,196 +1,160 @@
-function checkForm() {
-  const taskInput = document.getElementById("label");
-  const dueTimeInput = document.getElementById("time-picker");
-  const addButton = document.getElementById("add-button");
 
-  if (taskInput.value.trim() !== "" && dueTimeInput.value.trim() !== "") {
-    addButton.disabled = false;
-    addButton.style.color = "#5ab8de"; // Change button text color
-    addButton.style.border = "1px solid #5ab8de";
-  } else {
-    addButton.disabled = true;
+let index;
+let time_required, time_spent;
+let startBtn;
+let stopBtn;
+let hour = 00;
+let minute = 00;
+let second = 00;
+let count = 00;
+let totaltimeinseconds=0;
+let timer=false;
+const overlay = document.getElementById("overlay");
+// Function to hide the overlay
+function hideOverlay() {
+  overlay.style.display = "none";
+}
+
+// Add click event listener to the overlay
+overlay.addEventListener("click", function (event) {
+  // Check if the click target is the overlay itself or its child elements
+  if (event.target === overlay) {
+    hideOverlay();
+  }
+});
+
+function startStopWatch(indx, timerequired, timespent,btn){
+  time_required=timerequired;
+  index=indx;
+  time_spent = document.getElementById('timer-'+index).innerHTML;
+  taskid = document.getElementById('task-id-'+index).innerHTML;
+  [hour, minute, second] = time_spent.toString().split(":").map(Number);
+  //alert(hour+":"+minute+":"+second);
+  startBtn = document.getElementById('startbtn-'+index);
+  stopBtn = document.getElementById('stopbtn-'+index);
+  if(btn==1){
+    
+    timer = true;
+    startBtn.style.display = 'none';
+    stopBtn.style.display = 'block';
+    stopWatch();
+   
+  }
+  else{
+   
+    startBtn.style.display = 'block';
+    stopBtn.style.display = 'none';
+    timer = false;
+    var timeSpentInSeconds = convertTimeToSeconds(time_spent);
+    var percentage = (timeSpentInSeconds / time_required) * 100;
+    // Round the percentage to two decimal places
+    percentage = Math.round(percentage * 100) / 100;
+    //alert(percentage);
+    document.getElementById('percentage-'+index).innerHTML = percentage;
+
+    //Here I need to call php function to update the values of timespent in database
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var response = this.responseText;
+        // Handle the response from the PHP function
+        console.log('Task status updated:', response);
+      }
+    };
+    xhttp.open('POST', 'classes/updatetime.php', true);
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    var params = 'taskID=' + taskid + '&timespent=' + time_spent + '&timeRequired=' + time_required;
+    xhttp.send(params);
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("form");
-  const tableBody = document.getElementById("task-table-body");
-  const stopwatchData = []; // Array to store stopwatch-related variables and percentage for each row
+function convertTimeToSeconds(time) {
+  var timeArr = time.split(':');
+  var hours = parseInt(timeArr[0]);
+  var minutes = parseInt(timeArr[1]);
+  var seconds = parseInt(timeArr[2]);
+  var totalTimeInSeconds = (hours * 3600) + (minutes * 60) + seconds;
+  return totalTimeInSeconds;
+}
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
+function stopWatch() {
+  if (timer && convertTimeToSeconds(time_spent)<time_required) {
+    count++;
 
-    const taskInput = document.getElementById("label");
-    const dueTimeInput = document.getElementById("time-picker");
+    if (count == 100) {
+      second++;
+      count = 0;
+    }
 
-    const task = taskInput.value.trim();
-    const dueTime = dueTimeInput.value.trim();
+    if (second == 60) {
+      minute++;
+      second = 0;
+    }
 
-    // Create a new row in the table with the entered data
-    const newRow = document.createElement("tr");
-    const rowId = "row-" + Date.now(); // Unique ID for the row
-    newRow.id = rowId;
-    newRow.innerHTML = `
-   
-    <td>${task}</td>
-    <td></td>
-    <td>${dueTime}</td>
-    <td id="percentage-${rowId}"></td>
-    <td id="stopwatch-${rowId}">00:00:00</td>
-    <td style="text-align: center">
-      <button id="stopwatchButton-${rowId}" style="border: none; background: none;">
-        <img src="/sources/images/play (Stroke).png" alt="" style="width: 12px; height: 12px; margin-left: 0" />
-      </button>
-    </td>
-      <td style="text-align: center">
-        <button id="more-btn-${rowId}" class="more-btn" style="border: none; background: none;">
-          <img src="/sources/images/ellipsis.png" alt="" style="width: 3px; height: 12px; margin-left: 0px" />
-        </button>
-      </td>
-    `;
+    if (minute == 60) {
+      hour++;
+      minute = 0;
+      second = 0;
+    }
 
-    tableBody.appendChild(newRow);
+    let hrString = hour;
+    let minString = minute;
+    let secString = second;
+    let countString = count;
 
-    // Reset the form fields
-    taskInput.value = "";
-    dueTimeInput.value = "";
+    if (hour < 10) {
+      hrString = "0" + hrString;
+    }
 
-    // Disable the "Add" button again
-    document.getElementById("add-button").disabled = true;
-    document.getElementById("add-button").style = "";
+    if (minute < 10) {
+      minString = "0" + minString;
+    }
 
-    // Assuming you have a variable for the due time in seconds
-    const dueTimeSeconds = parseInt(dueTime) * 3600;
+    if (second < 10) {
+      secString = "0" + secString;
+    }
 
-    // Set the initial percentage to 0%
-    document.getElementById(`percentage-${rowId}`).textContent = "0%";
+    if (count < 10) {
+      countString = "0" + countString;
+    }
 
-    // Add stopwatch-related variables and percentage to the array for the new row
-    stopwatchData.push({
-      id: rowId,
-      interval: null,
-      running: false,
-      time: 0,
-      percentage: 0,
-    });
+    document.getElementById('timer-'+index).innerHTML = hrString+':'+minString+':'+secString;
+    time_spent= hrString+':'+minString+':'+secString;
+    setTimeout(stopWatch, 10);
+  }
+  else{
+    startBtn.style.display = 'block';
+    stopBtn.style.display = 'none';
+    timer = false;
+    var timeSpentInSeconds = convertTimeToSeconds(time_spent);
+    var percentage = (timeSpentInSeconds / time_required) * 100;
+    // Round the percentage to two decimal places
+    percentage = Math.round(percentage * 100) / 100;
+    //alert(percentage);
+    document.getElementById('percentage-'+index).innerHTML = percentage;
 
-    function updatePercentage(index) {
-      const { time, percentage } = stopwatchData[index];
-      const newPercentage = Math.floor((time / dueTimeSeconds) * 100);
-      if (percentage !== newPercentage) {
-        document.getElementById(
-          `percentage-${rowId}`
-        ).textContent = `${newPercentage}%`;
-        stopwatchData[index].percentage = newPercentage;
+    //Here I need to call php function to update the values of timespent in database
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var response = this.responseText;
+        // Handle the response from the PHP function
+        console.log('Task status updated:', response);
       }
-    }
+    };
+    xhttp.open('POST', 'classes/updatetime.php', true);
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    var params = 'taskID=' + taskid + '&timespent=' + time_spent + '&timeRequired=' + time_required;
+    xhttp.send(params);
+  }
+}
 
-    function updateStopwatch() {
-      stopwatchData.forEach(({ id, time }) => {
-        time++;
-        var hours = Math.floor(time / 3600);
-        var minutes = Math.floor((time % 3600) / 60);
-        var seconds = Math.floor(time % 60);
+function EditClicked(tid,tname,time_req){
+ // alert("I am here");
+  overlay.style.display = "block";
+//alert("h2");
+document.getElementById("utid").value=tid;
+document.getElementById("ulabel").value=tname;
+document.getElementById("utime").value=time_req/3600;
 
-        hours = hours.toString().padStart(2, "0");
-        minutes = minutes.toString().padStart(2, "0");
-        seconds = seconds.toString().padStart(2, "0");
-
-        document.getElementById(
-          `stopwatch-${id}`
-        ).textContent = `${hours}:${minutes}:${seconds}`;
-      });
-    }
-
-    function startStopwatch(index) {
-      const { id, running, interval } = stopwatchData[index];
-      if (!running) {
-        stopwatchData[index].running = true;
-        stopwatchData[index].interval = setInterval(() => {
-          stopwatchData[index].time++;
-          updateStopwatch();
-          updatePercentage(index);
-        }, 1000);
-        document.getElementById(`stopwatchButton-${id}`).innerHTML = `
-         <img src="/sources/images/Vector.png" alt="" style="width: 7px; height: 12px; margin-left: 0" />
-       `;
-      } else {
-        stopwatchData[index].running = false;
-        clearInterval(interval);
-        document.getElementById(`stopwatchButton-${id}`).innerHTML = `
-         <img src="/sources/images/play (Stroke).png" alt="" style="width: 12px; height: 12px; margin-left: 0" />
-       `;
-      }
-    }
-
-    document
-      .getElementById(`stopwatchButton-${rowId}`)
-      .addEventListener("click", () => {
-        const index = stopwatchData.findIndex((data) => data.id === rowId);
-        startStopwatch(index);
-      });
-
-    const dropdownMenu = document.getElementById(`dropdown-menu`);
-    const moreBtn = document.getElementById(`more-btn-${rowId}`);
-
-    // Hide the dropdown menu by default
-    dropdownMenu.style.display = "none";
-    // Add an event listener to show the dropdown menu on button click
-    moreBtn.addEventListener("click", function () {
-      // Toggle the display of the dropdown menu
-      dropdownMenu.style.display =
-        dropdownMenu.style.display === "none" ? "block" : "none";
-    });
-
-    // Add event listeners to menu items
-    // Inside the event listener for menu items
-    dropdownMenu.querySelectorAll("a").forEach(function (item) {
-      item.addEventListener("click", function (event) {
-        event.preventDefault();
-        const row = item.closest("tr");
-        if (row) {
-          const action = item.classList[0];
-          const rowId = row.id;
-          performAction(action, rowId);
-        }
-        dropdownMenu.style.display = "none";
-      });
-    });
-
-    // Perform the selected action
-    function performAction(action, rowId) {
-      switch (action) {
-        case "delete":
-          deleteFunction(rowId);
-          break;
-        case "edit":
-          // Call the edit function
-          editFunction();
-          break;
-        case "view-team":
-          // Call the view team function
-          viewTeamFunction();
-          break;
-        default:
-          console.log("Invalid action");
-      }
-    }
-
-    function deleteFunction(rowId) {
-      const row = document.getElementById(rowId);
-      if (row) {
-        row.remove();
-      }
-    }
-
-    function editFunction(index) {
-      // Implement the edit function here
-      console.log(`Edit function called for row ${index}`);
-    }
-
-    function viewTeamFunction(index) {
-      // Implement the view team function here
-      console.log(`View team function called for row ${index}`);
-    }
-  });
-});
+}

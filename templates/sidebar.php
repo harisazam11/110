@@ -24,7 +24,7 @@
       </div>
 
       <div class="navitem">
-        <a href="" class="a">
+        <a href="dashboard.php" class="a">
           <div class="nav">
             <span> <img src="images/grid.svg" alt="" /> </span>
           </div>
@@ -35,7 +35,7 @@
       </div>
 
       <div class="navitem">
-        <a href="" class="a">
+        <a href="reports.php" class="a">
           <div class="nav">
             <span> <img src="images/graph-up-arrow.svg" alt="" /> </span>
           </div>
@@ -46,7 +46,7 @@
       </div>
 
       <div class="navitem">
-        <a href="" class="a">
+        <a href="teams.php" class="a">
           <div class="nav">
             <span> <img src="images/people.svg" alt="" /> </span>
           </div>
@@ -115,9 +115,9 @@
         <div class="t3">
           <a href="" class="a">
             <div class="nav1">
-            <a class="nav-link" href="classes/admin-logout.php">
-            <span> <img src="images/box-arrow-left.svg" alt="" /> </span>
-            </a>
+                <span>
+                  <img src="images/people.svg" alt="" />
+                </span>
             </div>
           </a>
         </div>
