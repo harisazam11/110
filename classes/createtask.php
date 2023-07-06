@@ -14,7 +14,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $conn->query($sql);
     if ($result) {
     // Get the project ID assigned to the newly inserted row
-    $projectId = $conn->insert_id;
+    $taskId = $conn->insert_id;
+    $sql = "select project_name from projects where project_id = "+project_id;
+    $rs= $conn->query($sql);
+
+    //insert data in Notification Table
+    $notification_text = "You are Assigned a Task: ".$name." under Project: ".$rs->fetch_assoc()['project_name']." ";
+    $sql = "Insert into notifications (not_text,user_id,user_email,project_id,task_id)
+      values('$notification_text',$uid,'$umail',$project_id,$taskId)";
+    $rs= $conn->query($sql);
     $conn->close();
     header("location: ../tasks.php?pid=$project_id");
     }

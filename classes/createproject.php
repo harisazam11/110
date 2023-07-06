@@ -52,9 +52,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user_id = $_SESSION['user_id'];
         $user_name = $_SESSION['user_name'];
     // Insert the form data into the database table
-    $sql = "INSERT INTO projects (project_name, team, access, deadline,Status,created_by)
-            VALUES ('$projectName', '$count', '$access', '$deadline','To Do','$user_id')";
-            $result = $conn->query($sql);
+    // $sql = "INSERT INTO projects (project_name, team, access, deadline,Status,created_by)
+    //         VALUES ('$projectName', '$count', '$access', '$deadline','To Do','$user_id')";
+    //         $result = $conn->query($sql);
+
+            
+
+if ($access == 'Private') {
+    $accessValue = 0;
+} elseif ($access == 'Public') {
+    $accessValue = 1;
+} else {
+    // Handle the case where no access value is selected
+    $accessValue = 0; // or set it to a default value of your choice
+}
+
+// Insert the form data into the database table
+$sql = "INSERT INTO projects (project_name, team, access, deadline, Status, created_by)
+        VALUES ('$projectName', '$count', '$accessValue', '$deadline', 'Pending', '$user_id')";
+$result = $conn->query($sql);
+
+
     if ($result) {
         // Get the project ID assigned to the newly inserted row
         $projectId = $conn->insert_id;
@@ -71,7 +89,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $insertQuery = "INSERT INTO projectMembers (user_id, project_id,email, role)
                             VALUES ('$userId', '$projectId','$userM', '$role')";
             $insertResult = $conn->query($insertQuery);
-    
+            $notification_text = "You are Added in Project: ".$projectName." by $user_name";
+            $sql = "Insert into notifications (not_text,user_id,user_email,project_id)
+              values('$notification_text',$userId,'$userM',$projectId)";
+            $rs= $conn->query($sql);
             if (!$insertResult) {
                 // Handle the error if the insertion fails
                 echo "Failed to insert data into projectMembers table.";
@@ -79,6 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 break;
             }
         }
+       
         echo "Successfully Created Project";
     } else {
         echo "<script type= 'text/javascript'> alert(Error: " . $sql . "<br>" . $conn->error.")</script>;";

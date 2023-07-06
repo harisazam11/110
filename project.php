@@ -20,6 +20,8 @@
             <input type="radio" id="public" name="access" <?php if (isset($access) && $access=="public") echo "checked";?> value="Public" />
             <label for="public" class="radio-label">Public</label>
           </div>
+
+
         </div>
         <div class="filteration">
           <div class="input" style="
@@ -37,6 +39,7 @@
       </form>
     </div>
   </div>
+
   <div class="container">
     <div class="title">
       <div class="project-bar">
@@ -50,34 +53,88 @@
       </div>
     </div>
 
-    <div class="filter-bar">
+    <div class="filter-bar"> 
+     
+         <form  id="filter" action="filter.php" method="GET">
       <div class="filteration">
         <span class="fx1">Filter </span>
         <div class="flex">
           <span class="fx2">All</span>
         </div>
         <div class="flex">
-          <span class="fx3">Status</span>
+         <span class="fx3">Status
+
+
+  <select name="search" style="width: 100px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" >
+    <option>Status</option>
+    <?php
+    $con = mysqli_connect("localhost", "root", "", "ems");
+    $sql = "SELECT DISTINCT Status FROM projects"; // Update query to retrieve distinct status values
+    $result = mysqli_query($con, $sql);
+    if ($result === false) {
+      // Handle errors
+      die("Error: " . mysqli_error($con));
+    }
+    if (mysqli_num_rows($result) > 0) {
+      $statusArray = array(); // Create an array to store unique status values
+      while ($row = mysqli_fetch_assoc($result)) {
+        $status = $row['Status'];
+        if (!in_array($status, $statusArray)) { // Check if status value is already in the array
+          array_push($statusArray, $status); // Add unique status value to the array
+          echo "<option>{$status}</option>"; // Display the unique status value
+        }
+      }
+    }
+    ?>
+  </select>
+
+          </span>
         </div>
         <div class="flex">
-          <span class="fx4">Access</span>
+          <span class="fx4">Access
+
+ <select name="search" style="width: 100px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" >
+<option>Access</option>
+  <?php
+  $con = mysqli_connect("localhost", "root", "", "ems");
+  $sql = "SELECT DISTINCT access FROM projects";
+  $result = mysqli_query($con, $sql);
+  if ($result === false) {
+    // Handle errors
+    die("Error: " . mysqli_error($con));
+  }
+  if (mysqli_num_rows($result) > 0) {
+    $accessArray = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+      $access = $row['access'];
+      if (!in_array($access, $accessArray)) {
+        array_push($accessArray, $access);
+        if ($access == 0) {
+          echo "<option value='private'>Private</option>";
+        } elseif ($access == 1) {
+          echo "<option value='public'>Public</option>";
+        }
+      }
+    }
+  }
+  ?>
+</select>
+
+          
+          </span>
         </div>
         <div class="flex">
           <span class="fx5">
-            <input id="apply-button" class="pro-apply" type="submit" value="Apply" disabled />
+            
+            <input id="filter"  type="submit" value="Filter" />
+
+
+
           </span>
         </div>
-      </div>
+      </div> </form>
     </div>
-    <div class="search-bar">
-      <div class="icon">
-        <img style="margin: 8px" src="images/search.svg" alt="" />
-      </div>
-      <div class="find">
-        <div class="search">Search</div>
-      </div>
-    </div>
-
+  
     <br/><br/>
     <div class="project-list">
       <div class="pro-list">
@@ -127,5 +184,4 @@
     </div>
   </div>
   
-
-  <?php include "templates/footer.php"; ?>
+<?php include "templates/footer.php"; ?>
