@@ -1,10 +1,44 @@
 <?php
  session_start();
-  include("classes/config.php");
-  $uid= $_SESSION['user_id'];
-  $columns= "select * from tasks where assigned_to = '$uid' and time_required!=0;";
+   include("classes/config.php");
+// Retrieve user ID from session
+$uid = $_SESSION['user_id'];
+
+// Check if form is submitted for filtering
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+  // Prepare the WHERE clause for filtering
+  $whereClause = "assigned_to = '$uid'";
+
+  // Check if start date is provided
+  if (!empty($_GET["start_date"])) {
+    $startDate = $_GET["start_date"];
+    $whereClause .= " AND created_on >= '$startDate'";
+  }
+
+  // Check if end date is provided
+  if (!empty($_GET["end_date"])) {
+    $endDate = $_GET["end_date"];
+    $whereClause .= " AND created_on <= '$endDate'";
+  }
+
+  // Check if status is provided
+  if (!empty($_GET["status"]) && $_GET["status"] != "Status") {
+    $status = $_GET["status"];
+    $whereClause .= " AND status = '$status'";
+  }
+
+  // Construct the SQL query with the WHERE clause
+  $query = "SELECT * FROM tasks WHERE $whereClause";
+} else {
+  // If form is not submitted, retrieve all tasks for the user
+  $query = "SELECT * FROM tasks WHERE assigned_to = '$uid'";
+}
+
+$result = $conn->query($query);
+  // $uid= $_SESSION['user_id'];
+  // $columns= "select * from tasks where assigned_to = '$uid' and time_required!=0;";
   
-  $result = $conn->query($columns);
+  // $result = $conn->query($columns);
 ?>
 
 <?php include "templates/header.php"; ?>
@@ -45,28 +79,48 @@
       </div>
     </form>
 
-    <div class="filter-bar">
-      <div class="filteration">
-        <span class="fx1">Filter </span>
+   
+  <div class="filter-bar">  
+    <form id="filter" action="" method="GET">
+    <div class="filteration">
+      <span class="fx1">Filter </span>
+     
         <div class="flex">
-          <span class="fx2">Range</span>
+     
+            from<input type="date" name="start_date" placeholder="from">
+            to <input type="date" name="end_date" placeholder="to">
+          
         </div>
         <div class="flex">
-          <span class="fx3">Status</span>
+          <span class="fx3">
+            <select name="status" style="width: 100px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;">
+              <option>Status</option>
+              <option value="To Do">To Do</option>
+              <option value="Doing">Doing</option>
+              <option value="Done">Done</option>
+            </select>
+          </span>
         </div>
         <div class="flex">
-          <span class="fx4">Team</span>
+          <span class="fx4">
+              <select name="project_id" style="width: 100px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;">
+              <option>Project</option>
+              <option value="To Do">No Project</option>
+              <option value="Doing">Project</option>
+            </select>
+          </span>
         </div>
         <div class="flex">
           <span class="fx5">
-            <input id="apply-button" type="submit" value="Apply" disabled />
+            <input id="apply-button" type="submit" value="Apply" />
           </span>
         </div>
-      </div>
+      </form>
     </div>
-    <br/><br/>
-    <div class="project-list">
-      <div class="task-list">
+  </div>
+  <br/><br/>
+  <div class="project-list">
+    <div class="task-list">
         <!-- <div class="project-name">Name</div> -->
         <table>
           <thead>

@@ -1,7 +1,7 @@
+<?php session_start();?>
 <?php include "templates/header.php"; ?>
 <?php include "templates/sidebar.php"; ?>
 <?php
-session_start();
 include("classes/config.php");
 
 // Retrieve user ID from session
@@ -72,15 +72,15 @@ $result = $conn->query($query);
     </div>
   </form>
 
-  <div class="filter-bar">
+  <div class="filter-bar">  <form id="filter" action="" method="GET">
     <div class="filteration">
       <span class="fx1">Filter </span>
-      <form id="filter" action="" method="GET">
+     
         <div class="flex">
-          <span class="fx2">Range
+     
             from<input type="date" name="start_date" placeholder="from">
             to <input type="date" name="end_date" placeholder="to">
-          </span>
+          
         </div>
         <div class="flex">
           <span class="fx3">
@@ -94,7 +94,11 @@ $result = $conn->query($query);
         </div>
         <div class="flex">
           <span class="fx4">
-            
+              <select name="project_id" style="width: 100px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;">
+              <option>Project</option>
+              <option value="To Do">No Project</option>
+              <option value="Doing">Project</option>
+            </select>
           </span>
         </div>
         <div class="flex">
