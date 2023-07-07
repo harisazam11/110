@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 06, 2023 at 02:07 PM
+-- Generation Time: Jul 07, 2023 at 06:21 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -20,6 +20,32 @@ SET time_zone = "+00:00";
 --
 -- Database: `ems`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `not_id` int(11) NOT NULL,
+  `not_text` text DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  `created` date DEFAULT current_timestamp(),
+  `user_email` text NOT NULL,
+  `project_id` int(11) NOT NULL,
+  `task_id` int(11) DEFAULT NULL,
+  `isRead` int(11) NOT NULL DEFAULT 0,
+  `Link` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`not_id`, `not_text`, `user_id`, `created`, `user_email`, `project_id`, `task_id`, `isRead`, `Link`) VALUES
+(1, 'You are Assigned a Task: abc under Project: Test2 ', 1, '2023-07-06', 'javeriabutt6208@gmail.com', 2, 19, 0, ''),
+(2, 'You are Added in Project: User1Proj by user1@gmail.com', 1, '2023-07-06', 'javeriabutt6208@gmail.com', 10, NULL, 0, '');
 
 -- --------------------------------------------------------
 
@@ -42,12 +68,21 @@ INSERT INTO `projectmembers` (`user_id`, `project_id`, `role`, `email`) VALUES
 (0, 5, 'manager', 'javeriabutt6208@gmail.com'),
 (0, 6, 'manager', 'javeriabutt6208@gmail.com'),
 (0, 7, 'manager', 'javeriabutt6208@gmail.com'),
+(0, 8, 'manager', 'javeriabutt6208@gmail.com'),
+(0, 9, 'manager', 'javeriabutt6208@gmail.com'),
 (1, 2, 'manager', 'javeriabutt6208@gmail.com'),
+(1, 10, 'employee', 'javeriabutt6208@gmail.com'),
+(1, 11, 'manager', 'javeriabutt6208@gmail.com'),
 (2, 2, 'employee', 'user1@gmail.com'),
 (2, 6, 'employee', 'user1@gmail.com'),
 (2, 7, 'employee', 'user1@gmail.com'),
+(2, 8, 'employee', 'user1@gmail.com'),
+(2, 9, 'employee', 'user1@gmail.com'),
+(2, 10, 'manager', 'user1@gmail.com'),
+(3, 2, 'employee', 'user2@gmail.com'),
 (3, 6, 'employee', 'user2@gmail.com'),
-(3, 7, 'employee', 'user2@gmail.com');
+(3, 7, 'employee', 'user2@gmail.com'),
+(3, 9, 'employee', 'user2@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -61,18 +96,22 @@ CREATE TABLE `projects` (
   `team` varchar(255) NOT NULL,
   `access` tinyint(1) NOT NULL,
   `deadline` date NOT NULL,
-  `Status` text NOT NULL,
+  `Status` text NOT NULL DEFAULT 'To Do',
   `created_by` int(11) DEFAULT NULL,
-  `percentage` text DEFAULT NULL
+  `percentage` text DEFAULT '0',
+  `created_on` date DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `projects`
 --
 
-INSERT INTO `projects` (`project_id`, `project_name`, `team`, `access`, `deadline`, `Status`, `created_by`, `percentage`) VALUES
-(2, 'Test2', '1', 0, '2023-07-20', 'To Do', 1, '0'),
-(7, 'Test 4', '2', 0, '2023-07-21', 'Doing', 0, '46');
+INSERT INTO `projects` (`project_id`, `project_name`, `team`, `access`, `deadline`, `Status`, `created_by`, `percentage`, `created_on`) VALUES
+(2, 'Test2', '1', 0, '2023-07-20', 'To Do', 1, '0', '2023-07-07'),
+(7, 'Test 4', '2', 0, '2023-07-21', 'Doing', 1, '26', '2023-07-07'),
+(9, 'Test 1', '2', 0, '2023-07-27', 'To Do', 1, '0', '2023-07-07'),
+(10, 'User1Proj', '1', 1, '2023-07-13', 'To Do', 2, '0', '2023-07-07'),
+(11, 'test session', '0', 1, '2023-07-14', 'To Do', 1, '0', '2023-07-07');
 
 -- --------------------------------------------------------
 
@@ -86,17 +125,18 @@ CREATE TABLE `register` (
   `lastname` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `password` varchar(255) NOT NULL,
+  `picture` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `register`
 --
 
-INSERT INTO `register` (`user_id`, `firstname`, `lastname`, `username`, `email`, `password`) VALUES
-(1, 'javeria', 'butt', 'javeria', 'javeriabutt6208@gmail.com', 'Javeria'),
-(2, 'user', '1', 'user1', 'user1@gmail.com', 'user1'),
-(3, 'user', '2', 'user2', 'user2@gmail.com', 'user2');
+INSERT INTO `register` (`user_id`, `firstname`, `lastname`, `username`, `email`, `password`, `picture`) VALUES
+(1, 'javeria', 'butt', 'root', 'javeriabutt6208@gmail.com', '', 'images/pp/logo.JPG'),
+(2, 'user', '1', 'user1', 'user1@gmail.com', 'user1', NULL),
+(3, 'user', '2', 'user2', 'user2@gmail.com', 'user2', NULL);
 
 -- --------------------------------------------------------
 
@@ -116,17 +156,20 @@ CREATE TABLE `tasks` (
   `time_required` int(11) NOT NULL,
   `time_spent` text NOT NULL,
   `user_email` text NOT NULL,
-  `timer` text NOT NULL
+  `timer` text NOT NULL,
+  `created_on` date DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tasks`
 --
 
-INSERT INTO `tasks` (`task_id`, `task_name`, `project_id`, `assigned_to`, `file`, `description`, `status`, `due_date`, `time_required`, `time_spent`, `user_email`, `timer`) VALUES
-(6, 'Task1', 2, 2, NULL, NULL, 'To Do', '2023-07-13', 20, '00', 'user1@gmail.com', '00:00:00'),
-(7, 'task 3', 7, 2, NULL, NULL, 'To Do', '2023-07-20', 50, '0', 'user1@gmail.com', '00:00:00'),
-(8, 'test task', 7, 0, NULL, NULL, 'Doing', '2023-07-19', 108, '92.59', 'javeriabutt6208@gmail.com', '00:01:40');
+INSERT INTO `tasks` (`task_id`, `task_name`, `project_id`, `assigned_to`, `file`, `description`, `status`, `due_date`, `time_required`, `time_spent`, `user_email`, `timer`, `created_on`) VALUES
+(6, 'Task1', 2, 2, NULL, NULL, 'To Do', '2023-07-13', 20, '00', 'user1@gmail.com', '00:00:10', '2023-07-06'),
+(7, 'task 3', 7, 2, NULL, NULL, 'To Do', '2023-07-20', 50, '0', 'user1@gmail.com', '00:00:50', '2023-07-06'),
+(8, 'test task', 7, 1, NULL, NULL, 'Doing', '2023-07-05', 7200, '51.4', 'javeriabutt6208@gmail.com', '01:01:41', '2023-07-06'),
+(23, 'test', NULL, 1, NULL, NULL, 'Doing', NULL, 3600, '50.11', 'javeriabutt6208@gmail.com', '00:30:04', '2023-07-06'),
+(28, 'abc1', NULL, 1, NULL, NULL, 'To Do', NULL, 3600, '0', 'javeriabutt6208@gmail.com', '00:00:00', '2023-07-07');
 
 -- --------------------------------------------------------
 
@@ -145,6 +188,12 @@ CREATE TABLE `teams` (
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`not_id`);
 
 --
 -- Indexes for table `projectmembers`
@@ -182,10 +231,16 @@ ALTER TABLE `teams`
 --
 
 --
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `not_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `register`
@@ -197,7 +252,7 @@ ALTER TABLE `register`
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
