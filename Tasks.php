@@ -3,7 +3,7 @@
 <?php
    $project_id = $_GET['pid'];
 ?>
-    <div class="xcontainer" id="layout2">
+    <div class="container" id="layout2">
       <div class="title">
         <div class="project-bar">
           <div class="add-heading">Project: 

@@ -13,7 +13,7 @@ if($projectId!=-1){
 
     // Construct the HTML output
     $output ='<div class="ui-widgets">
-    <div class="ui-values">'.$projectData['percentage'].'%</div>
+    <div class="ui-values" style="margin-top:40px;">'.$projectData['percentage'].'%</div>
     <div class="ui-labels">Percentage</div>
        </div>'; 
     echo $output;
@@ -40,7 +40,7 @@ else{
 
      // Construct the HTML output
     $output ='<div class="ui-widgets">
-    <div class="ui-values">'.$totalPercentage.'%</div>
+    <div class="ui-values" style="margin-top:40px;">'.$totalPercentage.'%</div>
     <div class="ui-labels">Percentage</div>
        </div>'; 
     echo $output;

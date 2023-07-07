@@ -26,16 +26,17 @@ if($projectId!=-1){
 
     // Construct the HTML output
     
-    $output = '<p style="margin-left:30px;"><b>Project Name:</b> ' . $projectData['project_name'] . '</p>';
-    $output .= '<p style="margin-left:30px;"><b>Manager:</b> ' . $managerData['managerName'] . '</p>';
-    $output .= '<p style="margin-left:30px;"><b>Project Percentage:</b> ' . $projectData['percentage'] . '%</p>';
-    $output .= '<p style="margin-left:30px;"><b>Total Users:</b> ' . $projectData['team']+1 . '</p>';
-    $output .= '<p style="margin-left:30px;"><b>Total Tasks:</b> ' . ($projectData['totalTasks'] ).'</p>';
-    $output .= '<p style="margin-left:30px;"><b>Deadline:</b> ' . $projectData['deadline'] . '</p>';
-    $output .= '<p style="margin-left:30px;"><b>Total Completed Tasks:</b> ' . $projectData['totalCompletedTasks'] . '</p>';
-    $output .= '<p style="margin-left:30px;"><b>Total Late Tasks:</b> ' . $projectData['totalLateTasks'] . '</p>';
-    $output .= '<p style="margin-left:30px;"><b>Total Pending Tasks:</b> ' . $projectData['totalPendingTasks'] . '</p>';
-    $output .= '<p style="margin-left:30px;"><b>Total Ongoing Tasks:</b> ' . $projectData['totalOnGoingTasks'] . '</p>';
+    //$output = '<td style="margin-left:30px;"><b>Project Name:</b> ' . $projectData['project_name'] . '</td>';
+    $output = '<table><tr><td style="margin-left:30px;"><b>Manager:</b> ' . $managerData['managerName'] . '</td>';
+    $output .= '<td style="margin-left:30px;"><b>Project Percentage:</b> ' . $projectData['percentage'] . '%</td>';
+    $output .= '<td style="margin-left:30px;"><b>Total Users:</b> ' . $projectData['team']+1 . '</td>';
+    $output .= '</tr><tr><td style="margin-left:30px;"><b>Total Tasks:</b> ' . ($projectData['totalTasks'] ).'</td>';
+    $output .= '<td style="margin-left:30px;"><b>Deadline:</b> ' . $projectData['deadline'] . '</td>';
+    $output .= '<td style="margin-left:30px;"><b>Total Completed Tasks:</b> ' . $projectData['totalCompletedTasks'] . '</td>';
+    $output .= '</tr><tr><td style="margin-left:30px;"><b>Total Late Tasks:</b> ' . $projectData['totalLateTasks'] . '</td>';
+    $output .= '<td style="margin-left:30px;"><b>Total Pending Tasks:</b> ' . $projectData['totalPendingTasks'] . '</td>';
+    $output .= '<td style="margin-left:30px;"><b>Total Ongoing Tasks:</b> ' . $projectData['totalOnGoingTasks'] . '</td>';
+    $output .= '</tr></table>';
     echo $output;
 }
 else{
@@ -78,11 +79,12 @@ else{
 
      // Construct the HTML output
    
-    $output = '<p style="margin-left:30px;"><b>Total Percentage:</b> ' . $totalPercentage. '%</p>';
-    $output .= '<p style="margin-left:30px;"><b>Total Tasks:</b> ' . $totalTasks . '</p>';
-    $output .= '<p style="margin-left:30px;"><b>Total Completed Tasks:</b> ' .  $totaldoneTasks. '</p>';
-    $output .= '<p style="margin-left:30px;"><b>Total ongoing Tasks:</b> ' . $totalOngoingTasks . '</p>';
-    $output .= '<p style="margin-left:30px;"><b>Total Pending Tasks:</b> ' . $totalPendingTasks . '</p>';
+    $output = '<table><tr><td style="margin-left:30px;"><b>Total Percentage:</b> ' . $totalPercentage. '%</td>';
+    $output .= '<td style="margin-left:30px;"><b>Total Tasks:</b> ' . $totalTasks . '</td>';
+    $output .= '<td style="margin-left:30px;"><b>Total Completed Tasks:</b> ' .  $totaldoneTasks. '</td>';
+    $output .= '</tr><tr><td style="margin-left:30px;"><b>Total ongoing Tasks:</b> ' . $totalOngoingTasks . '</td>';
+    $output .= '<td style="margin-left:30px;"><b>Total Pending Tasks:</b> ' . $totalPendingTasks . '</td>';
+    $output .= '</tr></table>';
     echo $output;
 }
 }

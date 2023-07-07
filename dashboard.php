@@ -1,15 +1,25 @@
-<?php
+<?php 
 session_start();
+$loggedInUserId = $_SESSION['user_id'];
+
+if (isset($_GET['pid'])) {
+
+  $selectedProjectId = $_GET['pid'];
+} else {
+  // If pid is not set, set the selected project ID to the first item in the dropdown
+  $selectedProjectId = '';
+}
 ?>
 <?php include "templates/header.php"; ?>
 <?php include "templates/sidebar.php"; ?>
+  
 <style>
     .ui-widgets {
     position: relative;
     display: inline-block;
-    width: 10rem;
-    height: 10rem;
-    border-radius: 9rem;
+    width: 15rem;
+    height: 15rem;
+    border-radius: 14rem;
     margin:1.5rem;
     border: 1.2rem solid palegreen;
     box-shadow: inset 0 0 7px grey;
@@ -19,293 +29,343 @@ session_start();
     border-bottom-color: white ;
     text-align: center;
     box-sizing: border-box;
-}
-  
-/* Apply css properties to the second
-    child of ui-widgets class */
-.ui-widgets:nth-child(2) {
-    border-top-color:lightblue ;
-    border-right-color: blue;
-    border-left-color: darkblue;
-    border-bottom-color: white;
-}
-  
-/* Apply css properties to ui-widgets
-   class and ui-values class */
-.ui-widgets .ui-values {
-    top: 40px;
-    position: absolute;
-    left: 10px;
-    right: 0;
-    font-weight: 700;
-    font-size: 2.0rem;
-}
-  
-/*  Apply css properties to ui-widgets 
-class and ui-labels class */
-.ui-widgets .ui-labels {
-    left: 0;
-    bottom: -16px;
-    text-shadow: 0 0 4px grey;
-    color:black;
-    position: absolute;
-    width: 100%;
-    font-size: 16px;
-}
+	}
+	
+	/* Apply css properties to the second
+		child of ui-widgets class */
+	.ui-widgets:nth-child(2) {
+		border-top-color:lightblue ;
+		border-right-color: blue;
+		border-left-color: darkblue;
+		border-bottom-color: white;
+	}
+	
+	/* Apply css properties to ui-widgets
+	class and ui-values class */
+	.ui-widgets .ui-values {
+		top: 40px;
+		position: absolute;
+		left: 10px;
+		right: 0;
+		font-weight: 700;
+		font-size: 2.0rem;
+	}
+	
+	/*  Apply css properties to ui-widgets 
+	class and ui-labels class */
+	.ui-widgets .ui-labels {
+		left: 0;
+		bottom: -16px;
+		text-shadow: 0 0 4px grey;
+		color:black;
+		position: absolute;
+		width: 100%;
+		font-size: 16px;
+	}
 
 
+
+	body, table, input, select, textarea {
+
+	}
+
+
+	.graph {
+		margin-bottom:1em;
+	font:normal 100%/150% arial,helvetica,sans-serif;
+	}
+
+	.graph caption {
+		font:bold 150%/120% arial,helvetica,sans-serif;
+		padding-bottom:0.33em;
+	}
+
+	.graph tbody th {
+		text-align:right;
+	}
+
+	@supports (display:grid) {
+
+	@media (min-width:32em) {
+
+		.graph {
+			display:block;
+      width:700px;
+      height:200px;
+		}
+
+		.graph caption {
+			display:block;
+		}
+
+		.graph thead {
+			display:none;
+		}
+
+		.graph tbody {
+			position:relative;
+			display:grid;
+			grid-template-columns:repeat(auto-fit, minmax(2em, 1fr));
+			column-gap:2.5%;
+			align-items:end;
+			height:100%;
+			margin:3em 0 1em 2.8em;
+			padding:0 1em;
+			border-bottom:2px solid rgba(0,0,0,0.5);
+			background:repeating-linear-gradient(
+				180deg,
+				rgba(170,170,170,0.7) 0,
+				rgba(170,170,170,0.7) 1px,
+				transparent 1px,
+				transparent 20%
+			);
+		}
+
+		.graph tbody:before,
+		.graph tbody:after {
+			position:absolute;
+			left:-3.2em;
+			width:2.8em;
+			text-align:right;
+			font:bold 80%/120% arial,helvetica,sans-serif;
+		}
+
+		.graph tbody:before {
+			content:"100%";
+			top:-0.6em;
+		}
+
+		.graph tbody:after {
+			content:"0%";
+			bottom:-0.6em;
+		}
+
+		.graph tr {
+			position:relative;
+			display:block;
+		}
+
+		.graph tr:hover {
+			z-index:999;
+		}
+
+		.graph th,
+		.graph td {
+			display:block;
+			text-align:center;
+		}
+
+		.graph tbody th {
+			position:absolute;
+			top:-3em;
+			left:0;
+			width:100%;
+			font-weight:normal;
+			text-align:center;
+     		white-space:nowrap;
+			text-indent:0;
+			transform:rotate(-45deg);
+		}
+
+		.graph tbody th:after {
+			content:"";
+		}
+
+		.graph td {
+			width:100%;
+			height:100%;
+			background:lightblue;
+			border-radius:0.5em 0.5em 0 0;
+			transition:background 0.5s;
+		}
+
+		.graph tr:hover td {
+			opacity:0.7;
+		}
+
+		.graph td span {
+			overflow:hidden;
+			position:absolute;
+			left:50%;
+			top:50%;
+			width:0;
+			padding:0.5em 0;
+			margin:-1em 0 0;
+			font:normal 85%/120% arial,helvetica,sans-serif;
+	/* 			background:white; */
+	/* 			box-shadow:0 0 0.25em rgba(0,0,0,0.6); */
+			font-weight:bold;
+			opacity:1;
+			transition:opacity 0.5s;
+      color:black;
+		}
+
+		.toggleGraph:checked + table td span,
+		.graph tr:hover td span {
+			width:4em;
+			margin-left:-2em; /* 1/2 the declared width */
+			opacity:1;
+		}
+	} /* min-width:32em */
+
+	} /* grid only */
 </style>
 <div class="container">
-    <div class="title">
-      <div class="project-bar">
-        <div class="add-heading">Dashboard</div>
-      </div>
-    </div>
-            <!-- Circular progress bar with dynamic progress percentage -->
-            <div class="ui-widgets">
-                <div class="ui-values">
-                <?php
-                 include("classes/config.php");
-                 $uid = $_SESSION['user_name'];
-                    $sql = "select sum(time_spent) as s1, count(*) as c from tasks where user_email = '$uid'"; 
-                    $res= $conn->query($sql);
-                    if($res->num_rows>0){
-                        $row = $res->fetch_assoc();
-                        $per=$row['s1'];
-                        $c=$row['c'];
-                        echo $per/$c;
+			<div class="title" style="padding-bottom:5px">
+				<div class="project-bar">
+					<div class="add-heading">Dashboard</div>
+				</div>
+			
+			</div>
+            <div class="filter-bar" style="margin-top:0px;"> 
+                
+                <div  id="filter" >
+                    <div class="filteration">
+                        <!-- Dropdown list -->
+                        <span style="margin-left:5px;"><label for="project">Select Project:</label></span>
+
+                                <?php
+                                    
+                                    $options = '';
+                                    $roles = '';
+                                    // Query projects from the Projects table
+                                    $projectQuery = "SELECT p.project_id, p.project_name, p.created_by
+                                    FROM Projects p
+                                    LEFT JOIN ProjectMembers pm ON p.project_id = pm.project_id
+                                    WHERE (p.access = 1 AND (pm.user_id = '$loggedInUserId' AND pm.role = 'employee'))
+                                    OR (p.access = 1 AND p.created_by = '$loggedInUserId')
+                                    OR (p.access = 0 AND p.created_by = '$loggedInUserId')
+                                    GROUP BY p.project_id, p.project_name";
+                                    $projectResult = mysqli_query($conn, $projectQuery);
+                                    // Check if any projects are available
+                                    if (mysqli_num_rows($projectResult) > 0) {
+                                //    echo "<script type= 'text/javascript'> alert(".$selectedProjectId." )</script>";
+                                    
+                                
+                                    while ($row = mysqli_fetch_assoc($projectResult)) {
+                                    
+                                    if($row['project_id']==$selectedProjectId){
+                                        $options = $options . '<option  value="' . $row['project_id'] . '" selected>' . $row['project_name'] . '</option>';
+                                    
+                                        $roles = $roles . '<option  value="' . $row['created_by'] . '" selected>' . $row['created_by'] . '</option>';
+                                    
+                                        }
+                                        else{
+                                        $options = $options . '<option value="' . $row['project_id'] . '">' . $row['project_name'] . '</option>';
+                                        $roles = $roles . '<option value="' . $row['created_by'] . '">' . $row['created_by'] . '</option>';
+                                    
+                                        }
+                                        }
+                                        $options = $options . '<option  value="-1" >My Tasks</option>';
+                                    
+                                        $roles = $roles . '<option  value="-1" >My Tasks</option>';
+                                    
+                                    } else {
+                                        $options = $options . '<option  value="-1" >My Tasks</option>';
+                                        $roles = $roles . '<option  value="-1" >My Tasks</option>';
+                                    }
+
+                                    // Close the database connection
+                                    mysqli_close($conn);
+                                ?>
+
+                                <input type='text' style="display:none;" id="current_user_id" value='<?php echo $loggedInUserId;?>'/>
+                                <select style="margin:0px 20px; width:150px; height:100%; font-size:15px;padding:5px;" id="project" name="project">
+                                    <?php echo $options;?>
+                                </select>
+                                <select  style="display:none;margin:0px 20px; width:200px; height:100%; font-size:15px;padding:5px;" id="roles" name="roles">
+                                    <?php echo $roles;?>
+                                </select>
+                                <button style="background:lightgray; border:1px solid gray; padding:5px;"  onclick="showReport()">View Report</button>
                         
-                    }
-                ?>
-
+                    </div>
                 </div>
-                <div class="ui-labels">Timespent</div>
-            </div>
+           
+			</div>
+            <div  id="project-summary" style="background:white;margin:20px;">
+            
+		</div>
 
-    <div class="project-list">
-      <div class="pro-list" style="background:transparent;border:0px solid transparent;">
-         <div class="tab-buttons">
-            <button class="tab-button" onclick="openTab(event, 'tab1')"><b>Recent Tasks</b></button>
-            <button class="tab-button" onclick="openTab(event, 'tab2')"><b>On Going Tasks</b></button>
-            <button class="tab-button" onclick="openTab(event, 'tab3')"><b>Completed Tasks</b></button>
-        </div>
-        
-        <!-- Tab content -->
-        <div class="tab-content" id="tab1">
-            <table>
-            <thead>
-                <tr>
-                <td>Task Name</td>
-                <td>Deadline</td>
-                <td>Project</td>
-                <td>Status</td>
-                <td>Action</td>
-                </tr>
-            </thead>
-            <tbody>
-            <?php
-                include("classes/config.php");
-                $uid = $_SESSION['user_name'];
-                
-                // Retrieve project names from the database table
-                $sql = "SELECT * FROM tasks where user_email = '$uid' and status='To Do' order by task_id desc";
-                $result = $conn->query($sql);
-
-                if ($result->num_rows > 0) {
-                // Output Tasks
-                while ($row = $result->fetch_assoc()) {
-                    echo '<tr>';
-                    echo '<td>' . $row['task_name'] . '</td>';
-                    if($row['due_date']!= NULL){
-                    $currentDate = date('Y-m-d'); // Current date
-                    $dueDate = $row['due_date']; // Due date from the database
-                    
-                    // Convert dates to timestamps
-                    $currentTimestamp = strtotime($currentDate);
-                    $dueTimestamp = strtotime($dueDate);
-                   // Compare the timestamps
-                    if ($currentTimestamp < $dueTimestamp) 
-                        echo '<td>'. $row['due_date'] . '</td>';
-                    else 
-                    echo '<td style="color:red;">'. $row['due_date'] . '</td>';
-                    }
-                    else{
-                        echo '<td>'.($row['time_required'])/3600 .' Hour/s</td>';
-                    }
-                    
-                    if($row['project_id']!=NULL){
-                        $projId=$row['project_id'];
-                        $psql = "select project_name from projects where project_id =$projId";
-                        $pres= $conn->query($psql);
-                        echo '<td>'.$pres->fetch_assoc()['project_name'].'</td>';
-                    }
-                    else
-                        echo '<td>Open Task</td>';
-                    echo '<td>' . $row['status'] . '</td>';
-                    echo '<td><a href="tasks.php?pid='.$row["project_id"].'">View</a></td>';
-                    echo '</tr>';
-                }
-                } 
-                // Close the database connection
-                $conn->close();
-            ?>
-            </tbody>
-            </table>
-        </div>
-        
-        <div class="tab-content" id="tab2">
-        <table>
-            <thead>
-                <tr>
-                <td>Task Name</td>
-                <td>Deadline</td>
-                <td>Project</td>
-                <td>Status</td>
-                <td>Action</td>
-                </tr>
-            </thead>
-            <tbody>
-            <?php
-                include("classes/config.php");
-                $uid = $_SESSION['user_name'];
-                
-                // Retrieve project names from the database table
-                $sql = "SELECT * FROM tasks where user_email = '$uid' and status='Doing' order by task_id desc";
-                $result = $conn->query($sql);
-
-                if ($result->num_rows > 0) {
-                // Output Tasks
-                while ($row = $result->fetch_assoc()) {
-                    echo '<tr>';
-                    echo '<td>' . $row['task_name'] . '</td>';
-                    if($row['due_date']!= NULL){
-                    $currentDate = date('Y-m-d'); // Current date
-                    $dueDate = $row['due_date']; // Due date from the database
-                    
-                    // Convert dates to timestamps
-                    $currentTimestamp = strtotime($currentDate);
-                    $dueTimestamp = strtotime($dueDate);
-                   // Compare the timestamps
-                    if ($currentTimestamp < $dueTimestamp) 
-                        echo '<td>'. $row['due_date'] . '</td>';
-                    else 
-                    echo '<td style="color:red;">'. $row['due_date'] . '</td>';
-                    }
-                    else{
-                        echo '<td>'.($row['time_required'])/3600 .' Hour/s</td>';
-                    }
-                    
-                    if($row['project_id']!=NULL){
-                        $projId=$row['project_id'];
-                        $psql = "select project_name from projects where project_id =$projId";
-                        $pres= $conn->query($psql);
-                        echo '<td>'.$pres->fetch_assoc()['project_name'].'</td>';
-                    }
-                    else
-                        echo '<td>Open Task</td>';
-                    echo '<td>' . $row['status'] . '</td>';
-                    echo '<td><a href="tasks.php?pid='.$row["project_id"].'">View</a></td>';
-                    echo '</tr>';
-                }
-                } 
-                // Close the database connection
-                $conn->close();
-            ?>
-            </tbody>
-            </table>
-        </div>
-        
-        <div class="tab-content" id="tab3">
-        <table>
-            <thead>
-                <tr>
-                <td>Task Name</td>
-                <td>Deadline</td>
-                <td>Project</td>
-                <td>Status</td>
-                <td>Action</td>
-                </tr>
-            </thead>
-            <tbody>
-            <?php
-                include("classes/config.php");
-                $uid = $_SESSION['user_name'];
-                
-                // Retrieve project names from the database table
-                $sql = "SELECT * FROM tasks where user_email = '$uid' and status='Done' order by task_id desc";
-                $result = $conn->query($sql);
-
-                if ($result->num_rows > 0) {
-                // Output Tasks
-                while ($row = $result->fetch_assoc()) {
-                    echo '<tr>';
-                    echo '<td>' . $row['task_name'] . '</td>';
-                    if($row['due_date']!= NULL){
-                    $currentDate = date('Y-m-d'); // Current date
-                    $dueDate = $row['due_date']; // Due date from the database
-                    
-                    // Convert dates to timestamps
-                    $currentTimestamp = strtotime($currentDate);
-                    $dueTimestamp = strtotime($dueDate);
-                   // Compare the timestamps
-                    if ($currentTimestamp < $dueTimestamp) 
-                        echo '<td>'. $row['due_date'] . '</td>';
-                    else 
-                    echo '<td style="color:red;">'. $row['due_date'] . '</td>';
-                    }
-                    else{
-                        echo '<td>'.($row['time_required'])/3600 .' Hour/s</td>';
-                    }
-                    
-                    if($row['project_id']!=NULL){
-                        $projId=$row['project_id'];
-                        $psql = "select project_name from projects where project_id =$projId";
-                        $pres= $conn->query($psql);
-                        echo '<td>'.$pres->fetch_assoc()['project_name'].'</td>';
-                    }
-                    else
-                        echo '<td>Open Task</td>';
-                    echo '<td>' . $row['status'] . '</td>';
-                    echo '<td><a href="tasks.php?pid='.$row["project_id"].'">View</a></td>';
-                    echo '</tr>';
-                }
-                } 
-                // Close the database connection
-                $conn->close();
-            ?>
-            </tbody>
-            </table>
-        </div>
-      </div>
-    </div>
-  <!-- Tab buttons -->
- 
+	<table >
+        <tr>
+	        <td>
+                <div id="proj-percent" >
+                </div>
+            </td>
+         <td>
+			<table class="graph">
+				<caption style="margin-top:-50px;">Tasks Progress Details</caption>
+				<thead>
+					<tr>
+						<th scope="col">Task</th>
+						<th scope="col">Percent</th>
+					</tr>
+				</thead>
+				<tbody id="tasksBody">
+					<tr style="height:85%">
+						<th scope="row">Your Blog</th>
+						<td><span>85%</span></td>
+					</tr>
+					
+					<tr style="height:20%">
+						<th scope="row">Other</th>
+						<td><span>20%</span></td>
+					</tr>
+				</tbody>
+			</table>
+		</td></tr>
+	</table>
 </div>
-  <script>
-    // Function to open the selected tab
-    function openTab(evt, tabName) {
-      // Hide all tab content
-      var tabContents = document.getElementsByClassName("tab-content");
-      for (var i = 0; i < tabContents.length; i++) {
-        tabContents[i].style.display = "none";
-      }
-      
-      // Remove "active" class from tab buttons
-      var tabButtons = document.getElementsByClassName("tab-button");
-      for (var i = 0; i < tabButtons.length; i++) {
-        tabButtons[i].className = tabButtons[i].className.replace(" active", "");
-      }
-      
-      // Show the selected tab content and mark the button as active
-      document.getElementById(tabName).style.display = "block";
-      evt.currentTarget.className += " active";
-    }
-    
-    // Open the first tab by default
-    document.getElementById("tab1").style.display = "block";
-    document.getElementsByClassName("tab-button")[0].className += " active";
-  </script>
 
+<script>
+      // Function to set the first project as the default selection
+      function setDefaultProject() {
+        var projectDropdown = document.getElementById("project");
+          // Set the first project as the default selection
+          if (projectDropdown.options.length > 0) {
+         //   projectDropdown.selectedIndex = 0;
+          }
+          showReport();
+        }
 
+      // Execute the function on page load
+      setDefaultProject();
+
+      function showReport() {
+        var projectId = document.getElementById("project").value;
+        document.getElementById("roles").selectedIndex= document.getElementById("project").selectedIndex;
+        adminId=document.getElementById("roles").value;
+        var currUserId = document.getElementById("current_user_id").value;
+        // AJAX request to fetch tasks data
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("tasksBody").innerHTML = this.responseText;
+          }
+        };
+        xhr.open("GET", "classes/FetchtasksDetails.php?project_id=" + projectId, true);
+        xhr.send();
+
+		// AJAX request to fetch project summary
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("project-summary").innerHTML = this.responseText;
+          }
+        };
+        xhr.open("GET", "classes/getProjectSummary.php?project_id=" + projectId, true);
+        xhr.send();
+
+		// AJAX request to fetch project percentage
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("proj-percent").innerHTML = this.responseText;
+          }
+        };
+        xhr.open("GET", "classes/projectPercentage.php?project_id=" + projectId, true);
+        xhr.send();
+      }
+    </script>
 
 <?php include "templates/footer.php"; ?>
