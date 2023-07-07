@@ -69,7 +69,7 @@ if ($access == 'Private') {
 
 // Insert the form data into the database table
 $sql = "INSERT INTO projects (project_name, team, access, deadline, Status, created_by)
-        VALUES ('$projectName', '$count', '$accessValue', '$deadline', 'Pending', '$user_id')";
+        VALUES ('$projectName', '$count', '$accessValue', '$deadline', 'To Do', '$user_id')";
 $result = $conn->query($sql);
 
 

@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     } else {
       echo "<script type= 'text/javascript'> alert('Please enter valid values')</script>";
-
+      header("location: ../index.php");
     }
 
   }

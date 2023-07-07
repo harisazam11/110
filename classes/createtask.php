@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($result) {
     // Get the project ID assigned to the newly inserted row
     $taskId = $conn->insert_id;
-    $sql = "select project_name from projects where project_id = "+project_id;
+    $sql = "select project_name from projects where project_id = $project_id";
     $rs= $conn->query($sql);
 
     //insert data in Notification Table

@@ -1,5 +1,3 @@
-<?php include "templates/header.php"; ?>
-<?php include "templates/sidebar.php"; ?>
 <?php
  session_start();
   include("classes/config.php");
@@ -9,7 +7,10 @@
   $result = $conn->query($columns);
 ?>
 
-  <div class="container">
+<?php include "templates/header.php"; ?>
+<?php include "templates/sidebar.php"; ?>
+
+<div class="container">
     <div class="title">
       <span class="heading">Time Tracker</span>
     </div>
@@ -63,7 +64,7 @@
         </div>
       </div>
     </div>
-<br/><br/>
+    <br/><br/>
     <div class="project-list">
       <div class="task-list">
         <!-- <div class="project-name">Name</div> -->
@@ -134,19 +135,20 @@
       </div>
     </div>
     <div class="overlay" id="overlay">
-    <div class="form-container">
-      <h2>Update Task Time</h2>
-      <hr />
-      <form action="classes/edittimer.php" method="POST" class="create-form">
-        <div class="filteration">
-        <input type="text" name="utid"  id="utid" placeholder="Task Name" class="input"  style="display:none;" required readonly/>
-         
-          <input type="text" name="ulabel"  id="ulabel" placeholder="Task Name" class="input" required readonly/>
-          <input type="text" name="utime" id="utime" class="input" placeholder="Update Time Required" />
-        </div>
-        <input type="submit" value="Submit" id="create-project">
-      </form>
+      <div class="form-container">
+        <h2>Update Task Time</h2>
+        <hr />
+        <form action="classes/edittimer.php" method="POST" class="create-form">
+          <div class="filteration">
+          <input type="text" name="utid"  id="utid" placeholder="Task Name" class="input"  style="display:none;" required readonly/>
+          
+            <input type="text" name="ulabel"  id="ulabel" placeholder="Task Name" class="input" required readonly/>
+            <input type="text" name="utime" id="utime" class="input" placeholder="Update Time Required" />
+          </div>
+          <input type="submit" value="Submit" id="create-project">
+        </form>
+      </div>
     </div>
-  </div>
+</div>
    <script src="js/app.js"></script>
    <?php include "templates/footer.php"; ?>
