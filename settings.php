@@ -1,5 +1,3 @@
-<?php include "templates/header.php"; ?>
-<?php include "templates/sidebar.php"; ?>
 <?php
 session_start();
 include("classes/config.php");
@@ -9,6 +7,10 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.php"); // Redirect to login page if not logged in
     exit();
 }
+?>
+<?php include "templates/header.php"; ?>
+<?php include "templates/sidebar.php"; ?>
+<?php
 
 // Get the user ID from the session
 $uid = $_SESSION['user_id'];
@@ -77,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form method="POST" enctype="multipart/form-data"  class="create-form">
       
     <?php if ($picture !== null): ?>
-        <img src="<?php echo $picture; ?>" alt="Profile Picture"  width="300" >
+        <img src="<?php echo $picture; ?>"  alt="Profile Picture"  style="width:150px;height:150px; align-items:center;text-align:center;margin-left:30%;border-radius:149px;" />
     <?php else: ?>
         <p>No profile picture available.</p>
     <?php endif; ?><br>

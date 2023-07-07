@@ -1,7 +1,7 @@
+<?php session_start();?>
 <?php include "templates/header.php"; ?>
 <?php include "templates/sidebar.php"; ?>
 <?php
-session_start();
 include("classes/config.php");
 
 // Retrieve user ID from session
