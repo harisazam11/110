@@ -131,7 +131,7 @@
                   $result = $conn->query($sql);
                   $picpath = $result->fetch_assoc()['picture'];
                   if($picpath!=null){
-                    echo  '<img src="'.$picpath.'" alt="" />';
+                    echo  '<img style="border-radius:100%;" src="'.$picpath.'" alt="" />';
                   }
                   else{
                       echo ' <img src="images/people.svg" alt="" />';

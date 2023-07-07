@@ -1,48 +1,60 @@
 <?php
  session_start();
    include("classes/config.php");
-// Retrieve user ID from session
-$uid = $_SESSION['user_id'];
-
-// Check if form is submitted for filtering
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-  // Prepare the WHERE clause for filtering
-  $whereClause = "assigned_to = '$uid'";
-
-  // Check if start date is provided
-  if (!empty($_GET["start_date"])) {
-    $startDate = $_GET["start_date"];
-    $whereClause .= " AND created_on >= '$startDate'";
-  }
-
-  // Check if end date is provided
-  if (!empty($_GET["end_date"])) {
-    $endDate = $_GET["end_date"];
-    $whereClause .= " AND created_on <= '$endDate'";
-  }
-
-  // Check if status is provided
-  if (!empty($_GET["status"]) && $_GET["status"] != "Status") {
-    $status = $_GET["status"];
-    $whereClause .= " AND status = '$status'";
-  }
-
-  // Construct the SQL query with the WHERE clause
-  $query = "SELECT * FROM tasks WHERE $whereClause";
-} else {
-  // If form is not submitted, retrieve all tasks for the user
-  $query = "SELECT * FROM tasks WHERE assigned_to = '$uid'";
-}
-
-$result = $conn->query($query);
-  // $uid= $_SESSION['user_id'];
-  // $columns= "select * from tasks where assigned_to = '$uid' and time_required!=0;";
-  
-  // $result = $conn->query($columns);
 ?>
+
 
 <?php include "templates/header.php"; ?>
 <?php include "templates/sidebar.php"; ?>
+
+
+<?php
+  // Retrieve user ID from session
+  $uid = $_SESSION['user_id'];
+
+  // Check if form is submitted for filtering
+  if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    // Prepare the WHERE clause for filtering
+    $whereClause = "assigned_to = '$uid'";
+
+    // Check if start date is provided
+    if (!empty($_GET["start_date"])) {
+      $startDate = $_GET["start_date"];
+      $whereClause .= " AND created_on >= '$startDate'";
+    }
+
+    // Check if end date is provided
+    if (!empty($_GET["end_date"])) {
+      $endDate = $_GET["end_date"];
+      $whereClause .= " AND created_on <= '$endDate'";
+    }
+
+    // Check if status is provided
+    if (!empty($_GET["status"]) && $_GET["status"] != "Status") {
+      $status = $_GET["status"];
+      $whereClause .= " AND status = '$status'";
+    }
+    if (!empty($_GET["project_id"]) && $_GET["project_id"] != "3") {
+      $proj = $_GET["project_id"];
+      if($proj==1)
+      $whereClause .= " AND project_id is null";
+      else 
+      $whereClause .= " AND project_id is not null";
+    }
+    // Construct the SQL query with the WHERE clause
+    $query = "SELECT * FROM tasks WHERE $whereClause";
+  } else {
+    // If form is not submitted, retrieve all tasks for the user
+    $query = "SELECT * FROM tasks WHERE assigned_to = '$uid'";
+  }
+
+  $result = $conn->query($query);
+    // $uid= $_SESSION['user_id'];
+    // $columns= "select * from tasks where assigned_to = '$uid' and time_required!=0;";
+    
+    // $result = $conn->query($columns);
+?>
+
 
 <div class="container">
     <div class="title">
@@ -85,8 +97,7 @@ $result = $conn->query($query);
     <div class="filteration">
       <span class="fx1">Filter </span>
      
-        <div class="flex">
-     
+        <div class="flex">     
             from<input type="date" name="start_date" placeholder="from">
             to <input type="date" name="end_date" placeholder="to">
           
@@ -94,7 +105,7 @@ $result = $conn->query($query);
         <div class="flex">
           <span class="fx3">
             <select name="status" style="width: 100px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;">
-              <option>Status</option>
+              <option value="Status">Status</option>
               <option value="To Do">To Do</option>
               <option value="Doing">Doing</option>
               <option value="Done">Done</option>
@@ -103,10 +114,10 @@ $result = $conn->query($query);
         </div>
         <div class="flex">
           <span class="fx4">
-              <select name="project_id" style="width: 100px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;">
-              <option>Project</option>
-              <option value="To Do">No Project</option>
-              <option value="Doing">Project</option>
+              <select name="project_id" style="width: 150px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;">
+              <option value="3">Project Type</option>
+              <option value="1">No Project</option>
+              <option value="2">Project</option>
             </select>
           </span>
         </div>
