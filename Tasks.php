@@ -3,7 +3,7 @@
 <?php
    $project_id = $_GET['pid'];
 ?>
-    <div class="container" id="layout2">
+    <div class="xcontainer" id="layout2">
       <div class="title">
         <div class="project-bar">
           <div class="add-heading">Project: 
@@ -348,6 +348,37 @@
         </div>
       </div>
     </div>
+    <script>
+      // Get all radio buttons by name
+      const radioButtons = document.querySelectorAll('input[name="access"]');
 
+      // Add event listener to each radio button
+      radioButtons.forEach(function (radioButton) {
+        radioButton.addEventListener("change", function () {
+          // Reset color for all radio buttons
+          radioButtons.forEach(function (rb) {
+            rb.nextElementSibling.style.color = "";
+          });
+
+          // Change color of selected radio button value
+          if (this.checked) {
+            this.nextElementSibling.style.color = "black";
+          }
+        });
+      });
+    </script>
+    <script>
+      const sidebarToggle = document.getElementById("sidebarToggle");
+      const sidebar = document.querySelector(".sidebar");
+
+      sidebarToggle.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent the default behavior of the <a> tag
+        if (sidebar.classList.contains("active")) {
+          sidebar.classList.remove("active");
+        } else {
+          sidebar.classList.add("active");
+        }
+      });
+    </script>
 
     <?php include "templates/footer.php"; ?>

@@ -19,16 +19,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($user_data['password'] == $password) {
             $_SESSION['user_name'] = $email;
-			$_SESSION['user_id'] = $row['user_id'];
+			      $_SESSION['user_id'] = $user_data['user_id'];
+         //   echo "<script type= 'text/javascript'> alert(".$_SESSION['user_id'].")</script>";
           header("location: ../project.php");
           die;
         }
       }
     }
     echo "<script type= 'text/javascript'> alert('Incorrect username or password')</script>";
+    header("location: ../index.php");
 
   } else {
     echo "<script type= 'text/javascript'> alert('Incorrect username or password')</script>";
+    header("location: ../index.php");
   }
 }
 ?>

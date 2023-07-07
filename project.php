@@ -1,3 +1,8 @@
+<?php
+
+session_start();
+$loggedInUserId = $_SESSION['user_id'];
+?>
 <?php include "templates/header.php"; ?>
 <?php include "templates/sidebar.php"; ?>
 
@@ -56,83 +61,81 @@
     <div class="filter-bar"> 
      
          <form  id="filter" action="filter.php" method="GET">
-      <div class="filteration">
-        <span class="fx1">Filter </span>
-        <div class="flex">
-          <span class="fx2">All</span>
-        </div>
-        <div class="flex">
-         <span class="fx3">Status
+          <div class="filteration">
+            <span class="fx1">Filter </span>
+            <div class="flex">
+              <span class="fx2">All</span>
+            </div>
+            <div class="flex">
+              <span class="fx3">Status
 
 
-  <select name="search" style="width: 100px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" >
-    <option>Status</option>
-    <?php
-    $con = mysqli_connect("localhost", "root", "", "ems");
-    $sql = "SELECT DISTINCT Status FROM projects"; // Update query to retrieve distinct status values
-    $result = mysqli_query($con, $sql);
-    if ($result === false) {
-      // Handle errors
-      die("Error: " . mysqli_error($con));
-    }
-    if (mysqli_num_rows($result) > 0) {
-      $statusArray = array(); // Create an array to store unique status values
-      while ($row = mysqli_fetch_assoc($result)) {
-        $status = $row['Status'];
-        if (!in_array($status, $statusArray)) { // Check if status value is already in the array
-          array_push($statusArray, $status); // Add unique status value to the array
-          echo "<option>{$status}</option>"; // Display the unique status value
-        }
-      }
-    }
-    ?>
-  </select>
+                <select name="search" style="width: 100px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" >
+                  <option>Status</option>
+                  <?php
+                  $con = mysqli_connect("localhost", "root", "", "ems");
+                  $sql = "SELECT DISTINCT Status FROM projects"; // Update query to retrieve distinct status values
+                  $result = mysqli_query($con, $sql);
+                  if ($result === false) {
+                    // Handle errors
+                    die("Error: " . mysqli_error($con));
+                  }
+                  if (mysqli_num_rows($result) > 0) {
+                    $statusArray = array(); // Create an array to store unique status values
+                    while ($row = mysqli_fetch_assoc($result)) {
+                      $status = $row['Status'];
+                      if (!in_array($status, $statusArray)) { // Check if status value is already in the array
+                        array_push($statusArray, $status); // Add unique status value to the array
+                        echo "<option>{$status}</option>"; // Display the unique status value
+                      }
+                    }
+                  }
+                  ?>
+                </select>
 
-          </span>
-        </div>
-        <div class="flex">
-          <span class="fx4">Access
+              </span>
+            </div>
+            <div class="flex">
+              <span class="fx4">Access
 
- <select name="search" style="width: 100px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" >
-<option>Access</option>
-  <?php
-  $con = mysqli_connect("localhost", "root", "", "ems");
-  $sql = "SELECT DISTINCT access FROM projects";
-  $result = mysqli_query($con, $sql);
-  if ($result === false) {
-    // Handle errors
-    die("Error: " . mysqli_error($con));
-  }
-  if (mysqli_num_rows($result) > 0) {
-    $accessArray = array();
-    while ($row = mysqli_fetch_assoc($result)) {
-      $access = $row['access'];
-      if (!in_array($access, $accessArray)) {
-        array_push($accessArray, $access);
-        if ($access == 0) {
-          echo "<option value='private'>Private</option>";
-        } elseif ($access == 1) {
-          echo "<option value='public'>Public</option>";
-        }
-      }
-    }
-  }
-  ?>
-</select>
+                <select name="search" style="width: 100px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" >
+                  <option>Access</option>
+                    <?php
+                    $con = mysqli_connect("localhost", "root", "", "ems");
+                    $sql = "SELECT DISTINCT access FROM projects";
+                    $result = mysqli_query($con, $sql);
+                    if ($result === false) {
+                      // Handle errors
+                      die("Error: " . mysqli_error($con));
+                    }
+                    if (mysqli_num_rows($result) > 0) {
+                      $accessArray = array();
+                      while ($row = mysqli_fetch_assoc($result)) {
+                        $access = $row['access'];
+                        if (!in_array($access, $accessArray)) {
+                          array_push($accessArray, $access);
+                          if ($access == 0) {
+                            echo "<option value='private'>Private</option>";
+                          } elseif ($access == 1) {
+                            echo "<option value='public'>Public</option>";
+                          }
+                        }
+                      }
+                    }
+                    ?>
+                </select>
 
-          
-          </span>
-        </div>
-        <div class="flex">
-          <span class="fx5">
-            
-            <input id="filter"  type="submit" value="Filter" />
-
-
-
-          </span>
-        </div>
-      </div> </form>
+              
+              </span>
+            </div>
+            <div class="flex">
+              <span class="fx5">
+                
+                <input id="filter"  type="submit" value="Filter" />
+              </span>
+            </div>
+          </div> 
+        </form>
     </div>
   
     <br/><br/>
@@ -154,7 +157,13 @@
            include("classes/config.php");
 
             // Retrieve project names from the database table
-            $sql = "SELECT project_id, project_name, team, access, deadline,status FROM projects";
+            $sql = "SELECT p.project_id, p.project_name, p.status, p.access,p.deadline,p.team,pm.role
+            FROM Projects p
+            LEFT JOIN ProjectMembers pm ON p.project_id = pm.project_id
+            WHERE (p.access = 1 AND (pm.user_id = '$loggedInUserId' AND pm.role = 'employee'))
+            OR (p.access = 1 AND p.created_by = '$loggedInUserId')
+            OR (p.access = 0 AND p.created_by = '$loggedInUserId')
+            GROUP BY p.project_id, p.project_name";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
@@ -171,7 +180,8 @@
                 }
                 echo '<td>' . $row['deadline'] . '</td>';
                 echo '<td>' . $row['status'] . '</td>';
-                echo '<td><a href="tasks.php?pid='.$row["project_id"].'">View</a></td>';
+                echo '<td><a style="color:blue;" href="teams.php?pid='.$row["project_id"].'">View Team</a>';
+                echo ' | <a style="color:blue;" href="tasks.php?pid='.$row["project_id"].'">View Tasks</a></td>';
                 echo '</tr>';
               }
             } 

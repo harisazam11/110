@@ -1,4 +1,4 @@
-<body>
+<body style="background:whitesmoke;">
   <div class="navbars">
     <div class="sidebar">
       <div class="navitem">
@@ -70,7 +70,7 @@
       </div>
 
       <div class="navitem" style="position: absolute; bottom: 0; width: 100%">
-        <a href="login.php" class="a">
+        <a href="index.php" class="a">
           <div class="nav">
             <span> <img src="images/box-arrow-left.svg" alt="" /> </span>
           </div>
@@ -103,7 +103,7 @@
         </div>
 
         <div class="t2">
-          <a href="" class="a">
+          <a href="notifications.php" class="a">
             <div class="nav1">
               <span>
                 <img src="images/bell.svg" alt="" />
