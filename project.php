@@ -60,7 +60,6 @@ $loggedInUserId = $_SESSION['user_id'];
 
     <div class="filter-bar"> 
      
-         <form  id="filter" action="filter.php" method="GET">
           <div class="filteration">
             <span class="fx1">Filter </span>
             <div class="flex">
@@ -70,72 +69,33 @@ $loggedInUserId = $_SESSION['user_id'];
               <span class="fx3">Status
 
 
-                <select name="search" style="width: 100px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" >
-                  <option>Status</option>
-                  <?php
-                  $con = mysqli_connect("localhost", "root", "", "ems");
-                  $sql = "SELECT DISTINCT Status FROM projects"; // Update query to retrieve distinct status values
-                  $result = mysqli_query($con, $sql);
-                  if ($result === false) {
-                    // Handle errors
-                    die("Error: " . mysqli_error($con));
-                  }
-                  if (mysqli_num_rows($result) > 0) {
-                    $statusArray = array(); // Create an array to store unique status values
-                    while ($row = mysqli_fetch_assoc($result)) {
-                      $status = $row['Status'];
-                      if (!in_array($status, $statusArray)) { // Check if status value is already in the array
-                        array_push($statusArray, $status); // Add unique status value to the array
-                        echo "<option>{$status}</option>"; // Display the unique status value
-                      }
-                    }
-                  }
-                  ?>
+                <select id="s-status" name="s-status" style="width: 100px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" >
+                  <option value=''>All</option>
+                  <option value='To Do'>To Do</option>
+                  <option value='Doing'>Doing</option>
+                  <option value='Done'>Done</option>
                 </select>
+                 
 
               </span>
             </div>
             <div class="flex">
               <span class="fx4">Access
 
-                <select name="search" style="width: 100px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" >
-                  <option>Access</option>
-                    <?php
-                    $con = mysqli_connect("localhost", "root", "", "ems");
-                    $sql = "SELECT DISTINCT access FROM projects";
-                    $result = mysqli_query($con, $sql);
-                    if ($result === false) {
-                      // Handle errors
-                      die("Error: " . mysqli_error($con));
-                    }
-                    if (mysqli_num_rows($result) > 0) {
-                      $accessArray = array();
-                      while ($row = mysqli_fetch_assoc($result)) {
-                        $access = $row['access'];
-                        if (!in_array($access, $accessArray)) {
-                          array_push($accessArray, $access);
-                          if ($access == 0) {
-                            echo "<option value='private'>Private</option>";
-                          } elseif ($access == 1) {
-                            echo "<option value='public'>Public</option>";
-                          }
-                        }
-                      }
-                    }
-                    ?>
+                <select id="s-access" name="s-access" style="width: 100px; height: 30px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" >
+                  <option value='3'>All</option>
+                  <option value='1'>Public</option>
+                  <option value='2'>Private</option>
                 </select>
-
-              
               </span>
             </div>
             <div class="flex">
               <span class="fx5">
                 
-                <input id="filter"  type="submit" value="Filter" />
+                <button id="filter"  onclick="ApplyFilter()" >Apply</button>
               </span>
             </div>
           </div> 
-        </form>
     </div>
   
     <br/><br/>
@@ -152,46 +112,41 @@ $loggedInUserId = $_SESSION['user_id'];
               <td>Action</td>
             </tr>
           </thead>
-          <tbody>
-          <?php
-           include("classes/config.php");
-
-            // Retrieve project names from the database table
-            $sql = "SELECT p.project_id, p.project_name, p.status, p.access,p.deadline,p.team,pm.role
-            FROM Projects p
-            LEFT JOIN ProjectMembers pm ON p.project_id = pm.project_id
-            WHERE (p.access = 1 AND (pm.user_id = '$loggedInUserId' AND pm.role = 'employee'))
-            OR (p.access = 1 AND p.created_by = '$loggedInUserId')
-            OR (p.access = 0 AND p.created_by = '$loggedInUserId')
-            GROUP BY p.project_id, p.project_name";
-            $result = $conn->query($sql);
-
-            if ($result->num_rows > 0) {
-              // Output a dropdown menu for each project name
-              while ($row = $result->fetch_assoc()) {
-                echo '<tr>';
-                echo '<td>' . $row['project_name'] . '</td>';
-                // Display the rest of the project information
-                echo '<td>'. $row['team'] . '</td>';
-                if($row['access']==0)
-                {echo '<td>private</td>';}
-                else{
-                  echo '<td>public</td>';
-                }
-                echo '<td>' . $row['deadline'] . '</td>';
-                echo '<td>' . $row['status'] . '</td>';
-                echo '<td><a style="color:blue;" href="teams.php?pid='.$row["project_id"].'">View Team</a>';
-                echo ' | <a style="color:blue;" href="tasks.php?pid='.$row["project_id"].'">View Tasks</a></td>';
-                echo '</tr>';
-              }
-            } 
-            // Close the database connection
-            $conn->close();
-          ?>
+          <tbody id='t-projects'>
+         
           </tbody>
         </table>
       </div>
     </div>
   </div>
   
+<script>
+      // Function to set the first project as the default selection
+      function setDefaultProject() {
+        var dstatus = document.getElementById("s-status");
+        var daccess = document.getElementById("s-access");
+        daccess.selectedIndex = 0;
+        dstatus.selectedIndex=0;
+          ApplyFilter();
+        }
+
+      // Execute the function on page load
+      setDefaultProject();
+
+      function ApplyFilter() {
+        var status = document.getElementById("s-status").value;
+        var access = document.getElementById("s-access").value;
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+         //   alert(this.responseText);
+            document.getElementById("t-projects").innerHTML = this.responseText;
+          }
+        };
+        xhr.open("GET", "classes/GetProjects.php?status=" + status+"&access="+access, true);
+        xhr.send();
+      }
+    </script>
+
+
 <?php include "templates/footer.php"; ?>

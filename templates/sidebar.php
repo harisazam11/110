@@ -125,7 +125,19 @@
           <a href="" class="a">
             <div class="nav1">
                 <span>
-                  <img src="images/people.svg" alt="" />
+                  <?php
+                  include('classes/config.php');
+                  $sql = "select * from register where user_id = ".$_SESSION['user_id'];
+                  $result = $conn->query($sql);
+                  $picpath = $result->fetch_assoc()['picture'];
+                  if($picpath!=null){
+                    echo  '<img src="'.$picpath.'" alt="" />';
+                  }
+                  else{
+                      echo ' <img src="images/people.svg" alt="" />';
+                  }
+                  ?>
+                 
                 </span>
             </div>
           </a>
