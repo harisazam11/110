@@ -1,7 +1,5 @@
 <?php
-session_start();
-include("classes/config.php");
-
+include("classes/UpdateSettings.php");
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php"); // Redirect to login page if not logged in
@@ -36,8 +34,8 @@ if (!isset($_SESSION['user_id'])) {
             <br>
 
      <input type="file" name="picture" class="input" ><br>
-     Username <input type="text" name="username" value="<?php echo $username; ?>" class="input" ><br>
-      Password  <input type="password" name="password" value="<?php echo $password; ?>"  class="input" ><br>
+     Username <input type="text" name="u-user" value="<?php echo $uuser; ?>" class="input" /><br>
+      Password  <input type="password" name="u-pass" value="<?php echo $upass; ?>"  class="input" /><br>
      <input type="Submit" value="Update" class="input"  />
 
     </form> </div>

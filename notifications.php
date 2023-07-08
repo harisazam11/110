@@ -3,6 +3,11 @@
 <?php include "templates/sidebar.php"; ?>
 
 <div class="container">
+<div class="title">
+      <div class="project-bar">
+        <div class="add-heading">Notifications</div>
+      </div>
+    </div>
     <div class="project-list">
       <div class="pro-list">
         <table>
@@ -13,7 +18,7 @@
               <td>View</td>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="mybody">
           <?php
            include("classes/config.php");
             

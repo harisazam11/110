@@ -10,8 +10,8 @@
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $username = $row['username'];
-        $password = $row['password'];
+        $uuser = $row['username'];
+        $upass = $row['password'];
         $picture = $row['picture'];
     } else {
         echo "User not found.";
@@ -19,10 +19,10 @@
     }
 
     // Update user data
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         // Update username and password
-        $newUsername = $_POST['username'];
-        $newPassword = $_POST['password'];
+        $newUsername = $_POST['u-user'];
+        $newPassword = $_POST['u-pass'];
 
         $updateSql = "UPDATE register SET username = '$newUsername', password = '$newPassword' WHERE user_id = $uid";
 
@@ -55,5 +55,6 @@
                 echo "Error uploading profile picture: " . $fileError;
             }
         }
+        header("Location: ../settings.php");
     }
 ?>

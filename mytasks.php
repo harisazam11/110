@@ -14,9 +14,9 @@ session_start();
     border: 1.2rem solid palegreen;
     box-shadow: inset 0 0 7px grey;
     border-left-color: lightblue;
-    border-top-color:blue ;
-    border-right-color: darkblue;
-    border-bottom-color: white ;
+    border-top-color:lightblue ;
+    border-right-color: lightblue;
+    border-bottom-color: lightblue ;
     text-align: center;
     box-sizing: border-box;
 }
@@ -25,20 +25,20 @@ session_start();
     child of ui-widgets class */
 .ui-widgets:nth-child(2) {
     border-top-color:lightblue ;
-    border-right-color: blue;
-    border-left-color: darkblue;
-    border-bottom-color: white;
+    border-right-color: lightblue;
+    border-left-color: lightblue;
+    border-bottom-color: lightblue;
 }
   
 /* Apply css properties to ui-widgets
    class and ui-values class */
 .ui-widgets .ui-values {
-    top: 40px;
+    top: 45px;
     position: absolute;
     left: 10px;
     right: 0;
     font-weight: 700;
-    font-size: 2.0rem;
+    font-size: 1.5rem;
 }
   
 /*  Apply css properties to ui-widgets 
@@ -50,7 +50,7 @@ class and ui-labels class */
     color:black;
     position: absolute;
     width: 100%;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 
@@ -73,7 +73,7 @@ class and ui-labels class */
                         $row = $res->fetch_assoc();
                         $per=$row['s1'];
                         $c=$row['c'];
-                        echo $per/$c;
+                        echo round($per/$c,2)."%";
                         
                     }
                 ?>
@@ -102,7 +102,7 @@ class and ui-labels class */
                 <td>Action</td>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="mybody">
             <?php
                 include("classes/config.php");
                 $uid = $_SESSION['user_name'];
@@ -164,7 +164,7 @@ class and ui-labels class */
                 <td>Action</td>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="mybody">
             <?php
                 include("classes/config.php");
                 $uid = $_SESSION['user_name'];
@@ -226,7 +226,7 @@ class and ui-labels class */
                 <td>Action</td>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="mybody">
             <?php
                 include("classes/config.php");
                 $uid = $_SESSION['user_name'];

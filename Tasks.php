@@ -143,7 +143,7 @@ session_start();
                 </div>
                 <table>
                   <thead></thead>
-                  <tbody id="pt-table-body1">
+                  <tbody id="pt-table-body1" class="mybody">
                     
                         <?php
                         include("classes/config.php");
@@ -172,7 +172,7 @@ session_start();
 
                 <table>
                   <thead></thead>
-                  <tbody id="pt-table-body2">
+                  <tbody id="pt-table-body2" class="mybody">
                   <?php
                         include("classes/config.php");
 
@@ -199,7 +199,7 @@ session_start();
                 </div>
                 <table>
                   <thead></thead>
-                  <tbody id="pt-table-body3">
+                  <tbody id="pt-table-body3" class="mybody">
 
                   <?php
                         include("classes/config.php");
@@ -236,7 +236,7 @@ session_start();
                       <td>Deadline</td>
                     </tr>
                   </thead>
-                  <tbody id="p-table-body">
+                  <tbody id="p-table-body" class="mybody">
                   <?php
                         include("classes/config.php");
 
@@ -320,7 +320,7 @@ session_start();
                       <td></td>
                     </tr>
                   </thead>
-                  <tbody id="p-table-body"></tbody>
+                  <tbody id="p-table-body" class="mybody"></tbody>
                 </table>
               </div>
             </div>
@@ -345,7 +345,7 @@ session_start();
                       <td>Files</td>
                     </tr>
                   </thead>
-                  <tbody id="p-table-body"></tbody>
+                  <tbody id="p-table-body" class="mybody"></tbody>
                 </table>
               </div>
             </div>

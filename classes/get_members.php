@@ -23,7 +23,7 @@ $table = '<table>
               <th>Last Name</th>
               <th>Role</th>
             </tr>
-            </thead><tbody>';
+            </thead><tbody class="mybody">';
 
 while ($row = mysqli_fetch_assoc($result)) {
   $table .= '<tr>

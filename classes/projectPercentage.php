@@ -36,7 +36,7 @@ else{
      $totalTimeSpent = $timeSpentData['totalTimeSpent'];
      
      // Calculate the total percentage
-     $totalPercentage = ($totalTimeSpent / $totalTasks);
+     $totalPercentage = round(($totalTimeSpent / $totalTasks),2);
 
      // Construct the HTML output
     $output ='<div class="ui-widgets">

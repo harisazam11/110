@@ -112,7 +112,7 @@ $loggedInUserId = $_SESSION['user_id'];
               <td>Action</td>
             </tr>
           </thead>
-          <tbody id='t-projects'>
+          <tbody id='t-projects' class="mybody">
          
           </tbody>
         </table>

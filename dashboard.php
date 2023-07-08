@@ -23,10 +23,10 @@ if (isset($_GET['pid'])) {
     margin:1.5rem;
     border: 1.2rem solid palegreen;
     box-shadow: inset 0 0 7px grey;
-    border-left-color: lightblue;
-    border-top-color:blue ;
-    border-right-color: darkblue;
-    border-bottom-color: white ;
+	border-left-color: lightblue;
+    border-top-color:lightblue ;
+    border-right-color: lightblue;
+    border-bottom-color: lightblue ;
     text-align: center;
     box-sizing: border-box;
 	}
@@ -35,9 +35,9 @@ if (isset($_GET['pid'])) {
 		child of ui-widgets class */
 	.ui-widgets:nth-child(2) {
 		border-top-color:lightblue ;
-		border-right-color: blue;
-		border-left-color: darkblue;
-		border-bottom-color: white;
+		border-right-color: lightblue;
+		border-left-color: lightblue;
+		border-bottom-color: lightblue;
 	}
 	
 	/* Apply css properties to ui-widgets
@@ -106,7 +106,7 @@ if (isset($_GET['pid'])) {
 			position:relative;
 			display:grid;
 			grid-template-columns:repeat(auto-fit, minmax(2em, 1fr));
-			column-gap:2.5%;
+			column-gap:10%;
 			align-items:end;
 			height:100%;
 			margin:3em 0 1em 2.8em;

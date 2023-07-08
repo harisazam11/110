@@ -42,10 +42,10 @@
       $whereClause .= " AND project_id is not null";
     }
     // Construct the SQL query with the WHERE clause
-    $query = "SELECT * FROM tasks WHERE $whereClause";
+    $query = "SELECT * FROM tasks WHERE $whereClause and time_required!=0";
   } else {
     // If form is not submitted, retrieve all tasks for the user
-    $query = "SELECT * FROM tasks WHERE assigned_to = '$uid'";
+    $query = "SELECT * FROM tasks WHERE assigned_to = '$uid' and time_required!=0";
   }
 
   $result = $conn->query($query);

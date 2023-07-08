@@ -65,6 +65,10 @@ class and ui-labels class */
   width: 100%;
   font-size: 16px;
 }
+
+.mybody tr{
+  background-color: white;
+}
 .sidebar.active {
   width: 58px;
 }
