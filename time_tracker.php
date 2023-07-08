@@ -1,5 +1,9 @@
 <?php
  session_start();
+ $activeItem = 'a3'; // Replace 'a1' with the appropriate active item for each page
+
+// Store the active item in session storage
+$_SESSION['activeItem'] = $activeItem;
    include("classes/config.php");
 ?>
 

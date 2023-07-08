@@ -1,5 +1,9 @@
 <?php 
 session_start();
+$activeItem = 'a4'; // Replace 'a1' with the appropriate active item for each page
+
+// Store the active item in session storage
+$_SESSION['activeItem'] = $activeItem;
 $loggedInUserId = $_SESSION['user_id'];
 
 if (isset($_GET['pid'])) {

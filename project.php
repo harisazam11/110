@@ -1,6 +1,10 @@
 <?php
 
 session_start();
+$activeItem = 'a1'; // Replace 'a1' with the appropriate active item for each page
+
+// Store the active item in session storage
+$_SESSION['activeItem'] = $activeItem;
 $loggedInUserId = $_SESSION['user_id'];
 ?>
 <?php include "templates/header.php"; ?>

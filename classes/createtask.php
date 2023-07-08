@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $uid = explode(",", $user)[0];
     $umail = explode(",", $user)[1];
     include('config.php');
-
+    
     $sql = "INSERT INTO tasks (task_name,project_id, assigned_to,user_email,status, due_date, time_required, time_spent,timer)
     VALUES ('$name', '$project_id', '$uid','$umail', 'To Do','$deadline','0','0','00:00:00')";
     $result = $conn->query($sql);
@@ -23,6 +23,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sql = "Insert into notifications (not_text,user_id,user_email,project_id,task_id)
       values('$notification_text',$uid,'$umail',$project_id,$taskId)";
     $rs= $conn->query($sql);
+
+    //update file path
+
+    // Update profile picture
+    if ($_FILES['t-file']['name'] !== '') {
+      $file = $_FILES['t-file'];
+      $fileName = $file['name'];
+      $fileTmpName = $file['tmp_name'];
+      $fileError = $file['error'];
+
+      // Check for file upload errors
+      if ($fileError === 0) {
+          $destination = 'docs/pp/' . $fileName;
+          move_uploaded_file($fileTmpName, $destination);
+
+          $updatePictureSql = "UPDATE tasks SET file = '$destination' WHERE task_id = $taskId";
+
+          if ($conn->query($updatePictureSql) === TRUE) {
+              header("Location: ../tasks.php?pid=$project_id");
+          } else {
+              echo "Error uploading File: " . $conn->error;
+          }
+      } else {
+          echo "Error uploading File: " . $fileError;
+      }
+  }
     $conn->close();
     header("location: ../tasks.php?pid=$project_id");
     }

@@ -1,4 +1,9 @@
 <?php
+$activeItem = 'a7'; // Replace 'a1' with the appropriate active item for each page
+
+// Store the active item in session storage
+$_SESSION['activeItem'] = $activeItem;
+
 include("classes/UpdateSettings.php");
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {

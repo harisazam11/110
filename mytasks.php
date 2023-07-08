@@ -1,5 +1,10 @@
 <?php
 session_start();
+$activeItem = 'a2'; // Replace 'a1' with the appropriate active item for each page
+
+// Store the active item in session storage
+$_SESSION['activeItem'] = $activeItem;
+
 ?>
 <?php include "templates/header.php"; ?>
 <?php include "templates/sidebar.php"; ?>
@@ -73,7 +78,10 @@ class and ui-labels class */
                         $row = $res->fetch_assoc();
                         $per=$row['s1'];
                         $c=$row['c'];
-                        echo round($per/$c,2)."%";
+                        if($c!=0)
+                            echo round($per/$c,2)."%";
+                        else
+                            echo '0%';
                         
                     }
                 ?>
@@ -142,8 +150,11 @@ class and ui-labels class */
                     else
                         echo '<td>Open Task</td>';
                     echo '<td>' . $row['status'] . '</td>';
-                    echo '<td><a href="tasks.php?pid='.$row["project_id"].'">View</a></td>';
-                    echo '</tr>';
+                    if($row["file"] != NULL)
+                        echo '<td><a href="'.$row["file"].'" style="color:blue;" download>Download File</a></td>';
+                    else
+                        echo '<td>No Files</td>';
+                        echo '</tr>';
                 }
                 } 
                 // Close the database connection
@@ -204,8 +215,11 @@ class and ui-labels class */
                     else
                         echo '<td>Open Task</td>';
                     echo '<td>' . $row['status'] . '</td>';
-                    echo '<td><a href="tasks.php?pid='.$row["project_id"].'">View</a></td>';
-                    echo '</tr>';
+                    if($row["file"] != NULL)
+                        echo '<td><a href="'.$row["file"].'" style="color:blue;" download>Download File</a></td>';
+                    else
+                        echo '<td>No Files</td>';
+                        echo '</tr>';
                 }
                 } 
                 // Close the database connection
@@ -266,8 +280,11 @@ class and ui-labels class */
                     else
                         echo '<td>Open Task</td>';
                     echo '<td>' . $row['status'] . '</td>';
-                    echo '<td><a href="tasks.php?pid='.$row["project_id"].'">View</a></td>';
-                    echo '</tr>';
+                    if($row["file"] != NULL)
+                        echo '<td><a href="'.$row["file"].'" style="color:blue;" download>Download File</a></td>';
+                    else
+                        echo '<td>No Files</td>';
+                        echo '</tr>';
                 }
                 } 
                 // Close the database connection

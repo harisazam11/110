@@ -18,7 +18,11 @@ if ($count > 0) {
   echo "<script type= 'text/javascript'> alert('User is already a member of this project.')</script>";
  // echo "User is already a member of this project.";
   // You can redirect or show an error message as needed
-  header("location: ../teams.php?pid=$tProjectId");
+
+  if(isset($_POST['pagename']))
+    header("location: ../tasks.php?pid=$tProjectId");
+  else
+    header("location: ../teams.php?pid=$tProjectId");
   exit;
 }
 

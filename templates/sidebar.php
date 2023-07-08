@@ -2,7 +2,7 @@
   <div class="navbars">
     <div class="sidebar">
       <div class="navitem">
-        <a href="project.php" class="active a a1" id="a1" onclick="a1(1)">
+        <a href="project.php" class="<?php if($_SESSION['activeItem']=='a1') echo 'active'; ?> a a1" id="a1" onclick="a1(1)">
           <div class="nav">
             <span> <img src="images/file-text.svg" alt="" /> </span>
           </div>
@@ -12,7 +12,7 @@
         </a>
       </div>
       <div class="navitem">
-        <a href="mytasks.php" class="a a2" id="a2" onclick="a1(2)">
+        <a href="mytasks.php" class="<?php if($_SESSION['activeItem']=='a2') echo 'active'; ?> a a2" id="a2" onclick="a1(2)">
           <div class="nav">
             <span> <img src="images/tasks.png" alt="" /> </span>
           </div>
@@ -22,7 +22,7 @@
         </a>
       </div>
       <div class="navitem">
-        <a href="time_tracker.php" class="a a3" id="a3" onclick="a1(3)">
+        <a href="time_tracker.php" class="<?php if($_SESSION['activeItem']=='a3') echo 'active'; ?> a a3" id="a3" onclick="a1(3)">
           <div class="nav">
             <span> <img src="images/stopwatch.svg" alt="" /> </span>
           </div>
@@ -33,7 +33,7 @@
       </div>
 
       <div class="navitem">
-        <a href="dashboard.php" class="a a4" id="a4" onclick="a1(4)">
+        <a href="dashboard.php" class="<?php if($_SESSION['activeItem']=='a4') echo 'active'; ?> a a4" id="a4" onclick="a1(4)">
           <div class="nav">
             <span> <img src="images/grid.svg" alt="" /> </span>
           </div>
@@ -44,7 +44,7 @@
       </div>
 
       <div class="navitem">
-        <a href="reports.php" class="a a5" id="a5" onclick="a1(5)">
+        <a href="reports.php" class="<?php if($_SESSION['activeItem']=='a5') echo 'active'; ?> a a5" id="a5" onclick="a1(5)">
           <div class="nav">
             <span> <img src="images/graph-up-arrow.svg" alt="" /> </span>
           </div>
@@ -55,7 +55,7 @@
       </div>
 
       <div class="navitem">
-        <a href="teams.php" class="a a6" id="a6" onclick="a1(6)">
+        <a href="teams.php" class="<?php if($_SESSION['activeItem']=='a6') echo 'active'; ?> a a6" id="a6" onclick="a1(6)">
           <div class="nav">
             <span> <img src="images/people.svg" alt="" /> </span>
           </div>
@@ -66,7 +66,7 @@
       </div>
 
       <div class="navitem">
-        <a href="settings.php" class="a a7" id="a7" onclick="a1(7)">
+        <a href="settings.php" class="<?php if($_SESSION['activeItem']=='a7') echo 'active'; ?> a a7" id="a7" onclick="a1(7)">
           <div class="nav">
             <span>
               <img src="images/gear.svg" alt="" />
@@ -122,7 +122,7 @@
         </div>
 
         <div class="t3">
-          <a href="" class="a">
+          <a href="./index.php" class="a">
             <div class="nav1">
                 <span>
                   <?php
@@ -145,45 +145,4 @@
       </div>
     </div>
   </div>
-  <!-- <script>
-    a1(1);
-    function a1(id){
-      var activePage = window.location.pathname.split('/').pop();
-      if(activePage=="project.php")
-      {
-        document.getElementById("a1").classes.append("active");
-        document.getElementById("a2").classes.remove("active");
-        document.getElementById("a3").classes.remove("active");
-        document.getElementById("a4").classes.remove("active");
-        document.getElementById("a5").classes.remove("active");
-        document.getElementById("a6").classes.remove("active");
-        
-        document.getElementById("a7").classes.remove("active");
-      }
-      else if(activePage=="time_tracker.php"){
-
-        document.getElementById("a2").classes.append("active");
-        document.getElementById("a1").classes.remove("active");
-        document.getElementById("a3").classes.remove("active");
-        document.getElementById("a4").classes.remove("active");
-        document.getElementById("a5").classes.remove("active");
-        document.getElementById("a6").classes.remove("active");
-        
-        document.getElementById("a7").classes.remove("active");
-      }
-      // for(i=1;i<8;i++){
-      //   if(i==id)
-      //     document.getElementById("a"+id).classes.append("active");
-      //   else
-      //   document.getElementById("a"+i).classes.remove("active");
-      // }
-      // document.getElementById("a1").classes.append("active");
-      // document.getElementById("a2").classes.remove("active");
-      // document.getElementById("a3").classes.remove("active");
-      // document.getElementById("a4").classes.remove("active");
-      // document.getElementById("a5").classes.remove("active");
-      // document.getElementById("a6").classes.remove("active");
-      
-      // document.getElementById("a7").classes.remove("active");
-    }
-    </script> -->
+ 

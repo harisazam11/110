@@ -18,6 +18,17 @@
     });
   </script>
   <script src="./js/project.js"></script>
+  <script>
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var activeItem = sessionStorage.getItem('activeItem');
+    if (activeItem) {
+      var item = document.getElementById(activeItem);
+      item.classList.add('active');
+    }
+  });
+</script>
+
 </body>
 
 </html>

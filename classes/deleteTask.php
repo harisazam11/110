@@ -13,10 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $result = $conn->query($sql);
   $project_id = $result->fetch_assoc()['project_id'];
 
-  $sql = "select * from projects where project_id = $project_id limit 1";
+  $sql = "select * from projects where project_id = '$project_id'";
   $result = $conn->query($sql);
   $proj_created_by = $result->fetch_assoc()['created_by'];
-  $sql = "delete from tasks where task_id = $task_id and (project_id is NULL or assigned_to = $proj_created_by);";
+  $sql = "delete from tasks where task_id = '$task_id' and (project_id is NULL or assigned_to = '$proj_created_by');";
       $result = $conn->query($sql);
       if($result)
       {echo "<script type= 'text/javascript'> alert('Successfully registered')</script>";
