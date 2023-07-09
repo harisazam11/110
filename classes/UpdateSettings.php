@@ -33,28 +33,44 @@
         }
 
         // Update profile picture
-        if ($_FILES['picture']['name'] !== '') {
-            $file = $_FILES['picture'];
+        if ($_FILES['picturee']['name'] != '') {
+            $file = $_FILES['picturee'];
             $fileName = $file['name'];
-            $fileTmpName = $file['tmp_name'];
-            $fileError = $file['error'];
+		$fileNameAr= explode(".", $fileName);
+		$extension = end($fileNameAr);
+		$ext = strtolower($extension);
+       // echo "<script type= 'text/javascript'> alert(".$fileName.")</script>";
+       
+		if ($ext == "jpg" || $ext == "jpeg" || $ext == "png") {
+			
+			//print_r($file['size']);
 
-            // Check for file upload errors
-            if ($fileError === 0) {
-                $destination = 'images/pp/' . $fileName;
-                move_uploaded_file($fileTmpName, $destination);
+			if ($file['size'] > (1024 * 2)) {
+				    
+					$uniqueImageName = "/project/images/pp/".time()."_".$file['name'];
+                  //  echo "<script type= 'text/javascript'> alert(".$uniqueImageName.")</script>";
+                    $uploaded=move_uploaded_file($file['tmp_name'], $_SERVER['DOCUMENT_ROOT'].$uniqueImageName);
+                //    echo "<script type= 'text/javascript'> alert(".$_SERVER['DOCUMENT_ROOT'].$uniqueImageName.")</script>";
+                    
+                    if ($uploaded==TRUE){
+                        $updatePictureSql = "UPDATE register SET picture = '$uniqueImageName' WHERE user_id = $uid";
 
-                $updatePictureSql = "UPDATE register SET picture = '$destination' WHERE user_id = $uid";
-
-                if ($conn->query($updatePictureSql) === TRUE) {
-                    header("Location: ../settings.php");
-                } else {
-                    echo "Error updating profile picture: " . $conn->error;
+                        if ($conn->query($updatePictureSql) === TRUE) {
+                            header("Location: ../settings.php");
+                        } else {
+                            echo "Error updating profile picture: " . $conn->error;
+                        }
+                    }
                 }
-            } else {
+            }
+
+        } else
+         {
                 echo "Error uploading profile picture: " . $fileError;
             }
-        }
+        
+    
         header("Location: ../settings.php");
     }
+
 ?>

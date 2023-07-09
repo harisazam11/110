@@ -1,10 +1,10 @@
 <?php
 $activeItem = 'a7'; // Replace 'a1' with the appropriate active item for each page
+session_start();
 
 // Store the active item in session storage
 $_SESSION['activeItem'] = $activeItem;
 
-include("classes/UpdateSettings.php");
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php"); // Redirect to login page if not logged in
@@ -28,7 +28,10 @@ if (!isset($_SESSION['user_id'])) {
             include('classes/config.php');
             $sql = "select * from register where user_id = ".$_SESSION['user_id'];
             $result = $conn->query($sql);
-            $picpath = $result->fetch_assoc()['picture'];
+            $row = $result->fetch_assoc();
+            $picpath = $row['picture'];
+            $uuser = $row['username'];
+            $upass = $row['password'];
             if($picpath!=null){
               echo  '<img src="'.$picpath.'" alt="" style="width:150px;height:150px; align-items:center;text-align:center;margin-left:30%;border-radius:149px;"/>';
             }
@@ -38,7 +41,7 @@ if (!isset($_SESSION['user_id'])) {
             ?>
             <br>
 
-     <input type="file" name="picture" class="input" ><br>
+     <input type="file" name="picturee" class="input" /><br>
      Username <input type="text" name="u-user" value="<?php echo $uuser; ?>" class="input" /><br>
       Password  <input type="password" name="u-pass" value="<?php echo $upass; ?>"  class="input" /><br>
      <input type="Submit" value="Update" class="input"  />

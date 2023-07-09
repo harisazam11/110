@@ -28,26 +28,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Update profile picture
     if ($_FILES['t-file']['name'] !== '') {
-      $file = $_FILES['t-file'];
-      $fileName = $file['name'];
-      $fileTmpName = $file['tmp_name'];
-      $fileError = $file['error'];
+        $file = $_FILES['t-file'];
+        $fileName = $file['name'];
+    $fileNameAr= explode(".", $fileName);
+    $extension = end($fileNameAr);
+    $ext = strtolower($extension);
+   // echo "<script type= 'text/javascript'> alert(".$fileName.")</script>";
+   
+    //if ($ext == "jpg" || $ext == "jpeg" || $ext == "png") 
+    
+        
+        //print_r($file['size']);
 
-      // Check for file upload errors
-      if ($fileError === 0) {
-          $destination = 'docs/pp/' . $fileName;
-          move_uploaded_file($fileTmpName, $destination);
+      //  if ($file['size'] > (1024 * 2)) 
+      
+                
+                $uniqueImageName = "/project/docs/pp/".time()."_".$file['name'];
+              //  echo "<script type= 'text/javascript'> alert(".$uniqueImageName.")</script>";
+                $uploaded=move_uploaded_file($file['tmp_name'], $_SERVER['DOCUMENT_ROOT'].$uniqueImageName);
+            //    echo "<script type= 'text/javascript'> alert(".$_SERVER['DOCUMENT_ROOT'].$uniqueImageName.")</script>";
+                
+                if ($uploaded==TRUE){
 
-          $updatePictureSql = "UPDATE tasks SET file = '$destination' WHERE task_id = $taskId";
+                    $updatePictureSql = "UPDATE tasks SET file = '$uniqueImageName' WHERE task_id = $taskId";
 
-          if ($conn->query($updatePictureSql) === TRUE) {
-              header("Location: ../tasks.php?pid=$project_id");
-          } else {
-              echo "Error uploading File: " . $conn->error;
-          }
-      } else {
-          echo "Error uploading File: " . $fileError;
-      }
+                    if ($conn->query($updatePictureSql) === TRUE) {
+                        header("Location: ../tasks.php?pid=$project_id");
+                    } else {
+                        echo "Error uploading File: " . $conn->error;
+                    }
+                }
+                else {
+                    echo "Error uploading File: " . $fileError;
+                }
   }
     $conn->close();
     header("location: ../tasks.php?pid=$project_id");

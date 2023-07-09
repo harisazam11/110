@@ -25,12 +25,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           die;
         }
       }
+      else{
+        echo "<script type= 'text/javascript'> alert('Incorrect username or password');</script>";
+        header("location: ../index.php");
+      }
     }
-    echo "<script type= 'text/javascript'> alert('Incorrect username or password')</script>";
+    else{
+    echo "<script type= 'text/javascript'> alert('Incorrect username or password');</script>";
     header("location: ../index.php");
+    }
 
   } else {
-    echo "<script type= 'text/javascript'> alert('Incorrect username or password')</script>";
+    echo "<script type= 'text/javascript'> alert('Incorrect username or password');</script>";
     header("location: ../index.php");
   }
 }
