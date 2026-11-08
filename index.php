@@ -70,7 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <div class="filteration">
         <input type="password" name="password" placeholder="Password" class="input" required />
       </div>
-      <div class="pass"><a href="reset.html">Forget Password?</a></div>
       <div>
         <input type="submit" value="LOG IN" class="create" />
       </div>

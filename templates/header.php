@@ -44,6 +44,17 @@ include("./classes/config.php");
       display: block;
     }
   </style>
+
+<script>
+function openNotificationsOverlay() {
+  document.getElementById("notificationsOverlay").style.display = "block";
+}
+
+function closeNotificationsOverlay() {
+  document.getElementById("notificationsOverlay").style.display = "none";
+}
+</script>
+
   <title>Project</title>
 </head>
 

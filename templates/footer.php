@@ -1,3 +1,11 @@
+<div id="notificationsOverlay" class="overlay">
+  <div class="overlay-content">
+    <span class="close" onclick="closeNotificationsOverlay()">&times;</span>
+    <iframe src="notifications.php" frameborder="0" scrolling="auto"></iframe>
+  </div>
+</div>
+
+
 <script>
     // Get all radio buttons by name
     const radioButtons = document.querySelectorAll('input[name="access"]');

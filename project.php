@@ -67,7 +67,7 @@ $loggedInUserId = $_SESSION['user_id'];
           <div class="filteration">
             <span class="fx1">Filter </span>
             <div class="flex">
-              <span class="fx2">All</span>
+              
             </div>
             <div class="flex">
               <span class="fx3">Status

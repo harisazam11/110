@@ -14,7 +14,7 @@ $loggedInUserId = $_SESSION['user_id'];
             $sql = "SELECT p.project_id, p.project_name, p.status, p.access,p.deadline,p.team,pm.role
             FROM Projects p
             LEFT JOIN ProjectMembers pm ON p.project_id = pm.project_id
-            WHERE (p.access = 1 AND (pm.user_id = '$loggedInUserId' AND pm.role = 'employee'))
+            WHERE (pm.user_id = '$loggedInUserId' AND pm.role = 'employee')
             OR (p.access = 1 AND p.created_by = '$loggedInUserId')
             OR (p.access = 0 AND p.created_by = '$loggedInUserId')
             GROUP BY p.project_id, p.project_name";
@@ -52,6 +52,8 @@ $loggedInUserId = $_SESSION['user_id'];
                 $output .= '<td>' . $row['status'] . '</td>';
                 $output .= '<td><a style="color:blue;" href="teams.php?pid='.$row["project_id"].'">View Team</a>';
                 $output .= ' | <a style="color:blue;" href="tasks.php?pid='.$row["project_id"].'">View Tasks</a></td>';
+                // $output .= ' | <a style="color:blue;" href="classes/deleteproject.php?pid='.$row["project_id"].'">delete Project</a></td>';
+
                 $output .= '</tr>';
               }
               

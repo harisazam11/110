@@ -13,6 +13,8 @@ $_SESSION['activeItem'] = $activeItem;
 
 
 <?php
+$startDate = "";
+$endDate = "";
   // Retrieve user ID from session
   $uid = $_SESSION['user_id'];
 
@@ -102,8 +104,8 @@ $_SESSION['activeItem'] = $activeItem;
       <span class="fx1">Filter </span>
      
         <div class="flex">     
-            from<input type="date" name="start_date" placeholder="from">
-            to <input type="date" name="end_date" placeholder="to">
+              <input type="date" name="start_date" placeholder="from">
+              <input type="date" name="end_date" placeholder="Till">
           
         </div>
         <div class="flex">
@@ -135,6 +137,9 @@ $_SESSION['activeItem'] = $activeItem;
   </div>
   <br/><br/>
   <div class="project-list">
+    <?php
+    echo '<p5 style="font-size:14px;margin-left: 20px;" class="fx1">' . $startDate . " - " . $endDate . '</p5>';
+    ?>
     <div class="task-list">
         <!-- <div class="project-name">Name</div> -->
         <table>
@@ -143,6 +148,7 @@ $_SESSION['activeItem'] = $activeItem;
               <th>Task</th>
               <th>Project</th>
               <th>Due</th>
+              
               <th>%</th>
               <th>00:00:00</th>
               <th>Start</th>

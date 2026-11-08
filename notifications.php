@@ -1,54 +1,74 @@
+<style>
+  <style>
+.overlay {
+  display: block;
+  position: fixed;
+  width: 100px;
+  height: 250px;
+  overflow: auto;
+}
 
-<?php session_start(); include "templates/header.php"; ?>
-<?php include "templates/sidebar.php"; ?>
+.overlay-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+
+</style>
 
 <div class="container">
-<div class="title">
-      <div class="project-bar">
-        <div class="add-heading">Notifications</div>
-      </div>
+  <div class="title">
+    <div class="project-bar">
+      <div class="add-heading">Notifications</div>
     </div>
-    <div class="project-list">
-      <div class="pro-list">
-        <table>
-          <thead>
-            <tr>
-              <td>Notification</td>
-              <td>Date</td>
-              <td>View</td>
-            </tr>
-          </thead>
-          <tbody class="mybody">
-          <?php
-           include("classes/config.php");
-            
-            $uid=$_SESSION['user_id'];
-            // Retrieve project names from the database table
-            $sql = "SELECT * FROM notifications where user_id = $uid order by not_id desc";
-            $result = $conn->query($sql);
+  </div>
+  <div class="project-list">
+    <div class="pro-list">
+      <table>
+        <thead>
+          <tr>
+            <td>Notification</td>
+            <td>Date</td>
+            <td>View</td>
+          </tr>
+        </thead>
+        <tbody class="mybody">
+          <script>
+            function fetchNotifications() {
+              // Make an AJAX request to fetch notifications from fetch_notifications.php
+              // and update the content of the <tbody> element.
+              var xhttp = new XMLHttpRequest();
+              xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                  document.querySelector(".mybody").innerHTML = this.responseText;
+                }
+              };
+              xhttp.open("GET", "fetch_notifications.php", true);
+              xhttp.send();
+            }
 
-            if ($result->num_rows > 0) {
-              // Output a dropdown menu for each project name
-              while ($row = $result->fetch_assoc()) {
-                echo '<tr>';
-                echo '<td>' . $row['not_text'] . '</td>';
-                // Display the rest of the project information
-                echo '<td>'. $row['created'] . '</td>';
-                if($row['task_id']!=NULL)
-                    echo '<td><a href="mytasks.php?tid='.$row["task_id"].'">View</a></td>';
-                else
-                    echo '<td><a href="tasks.php?pid='.$row["project_id"].'">View</a></td>';
-                echo '</tr>';
-              }
-            } 
-            // Close the database connection
-            $conn->close();
-          ?>
-          </tbody>
-        </table>
-      </div>
+            // Fetch notifications when the page loads
+            fetchNotifications();
+          </script>
+        </tbody>
+      </table>
     </div>
+  </div>
 </div>
-
-
-<?php include "templates/footer.php"; ?>

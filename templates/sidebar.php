@@ -105,24 +105,23 @@
           <a href="" id="sidebarToggle" class="a">
             <div class="nav1">
               <span>
-                <img src="images/question-circle.svg" alt="" />
+                <!-- <img src="images/question-circle.svg" alt="" /> -->
               </span>
             </div>
           </a>
         </div>
 
         <div class="t2">
-          <a href="notifications.php" class="a">
-            <div class="nav1">
-              <span>
-                <img src="images/bell.svg" alt="" />
-              </span>
-            </div>
-          </a>
-        </div>
+  <div class="nav1" onclick="openNotificationsOverlay()">
+    <span>
+      <img src="images/bell.svg" alt="" />
+    </span>
+  </div>
+</div>
+
 
         <div class="t3">
-          <a href="./index.php" class="a">
+          <a href="./settings.php" class="a">
             <div class="nav1">
                 <span>
                   <?php

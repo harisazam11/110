@@ -1,46 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+session_start();
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Efficiency Monitoring System</title>
-  <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
-</head>
+include("config.php");
 
-<body>
-  <div class="login_link">
-    Already have an account? <a href="index.php">Log in</a>
-  </div>
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  // Retrieve the form data
+  $firstname = $_POST["firstname"];
+  $lastname = $_POST["lastname"];
+  $username = $_POST["username"];
+  $email = $_POST["email"];
+  $password = $_POST["password"];
+  $confirm_password = $_POST["confirm_p"];
 
-  <div class="sign">
-    <h3>Sign up</h3>
-    <hr />
-    <form action="classes/signup.php" method="POST" class="signup-form">
-      <div class="filteration">
-        <input type="text" name="firstname" placeholder="First Name" class="input" required />
-        <input type="text" name="lastname" class="input" placeholder="Last Name" required />
-      </div>
-      <div class="filteration">
-        <input type="text" name="username" placeholder="Username" class="input" required />
-      </div>
+  if ($password !== $confirm_password) {
+    echo "Error: Password and confirm password do not match";
+    exit;
+  } else {
 
-      <div class="filteration">
-        <input type="email" name="email" placeholder="Email" class="input" required />
-      </div>
+    if (!empty($email) && !empty($password) && !is_numeric($email)) {
 
-      <div class="filteration">
-        <input type="password" name="password" placeholder="Password" class="input" required />
-        <input type="password" name="confirm_p" placeholder="Confirm Password" class="input" required />
-      </div>
+      $sql = "select count(*) as c from register where username='$username' or email = '$email'";
+      if($conn->query($sql)->fetch_assoc()['c']==0)
+      {
+            $sql = "INSERT INTO register (firstname, lastname, username, email, password) VALUES ('$firstname', '$lastname', '$username', '$email', '$password')";
 
-      <div>
-        <input type="submit" value="SIGN UP" class="create" />
-      </div>
-    </form>
-  </div>
-</body>
+            $result = mysqli_query($conn, $sql);
+            $_SESSION['user_name'] = $email;
+            echo "<script type= 'text/javascript'> alert('Successfully registered')</script>";
+            header("location: ../index.php");
+            die;
+      }
+      else{
+        echo "<script type= 'text/javascript'> alert('Email or Username already In Use')</script>";
+        echo "<script type='text/javascript'>window.location.href = '../signup.php';</script>";
+        exit();
+       // die;
+      }
+    } else {
+      echo "<script type= 'text/javascript'> alert('Please enter valid values')</script>";
+      header("location: ../signup.php");
+    }
 
-</html>
+  }
+
+}
+?>

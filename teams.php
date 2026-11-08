@@ -97,7 +97,25 @@ if (isset($_GET['pid'])) {
                     required
                     style="display:none"
                   />
-                <div class="add-label">
+                  <select  class="label"
+                    id="t-email"
+                    name="t-email"
+                    placeholder="Add new Member">
+                <?php
+
+                  include('classes/config.php');
+                  $sql = "select * from register where user_id!=$loggedInUserId;";
+                  $result = $conn->query($sql);
+                  if($result->num_rows>0){
+                    while($row = $result->fetch_assoc()){
+                      echo "<option value='".$row['email']."'>".$row['username']."</option>";
+                    }
+                  }
+
+                ?>
+
+              </select>
+                <!-- <div class="add-label">
                   <input
                     type="text"
                     class="label"
@@ -107,7 +125,7 @@ if (isset($_GET['pid'])) {
                     oninput="check()"
                     required
                   />
-                </div>
+                </div> -->
 
                 <div class="add-due">
                   
